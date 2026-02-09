@@ -2,9 +2,16 @@
 
 ## Tech Used
 
+### Frontend
+
 - React 19
 - Vite
-- CSS
+- Tailwind CSS
+- Axios
+
+### Backend
+
+- Express JS
 
 ## Installation
 

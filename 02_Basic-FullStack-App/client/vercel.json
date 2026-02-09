@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://backend-labs-gcrh.onrender.com/api/:path*"
+      "destination": "https://api.blab-2.gdsamrat.qzz.io/api/:path*"
     }
   ]
 }

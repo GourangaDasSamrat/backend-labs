@@ -1,5 +1,8 @@
 # Simple Jokes App
 
+Live preview
+Click [here](https://blab-2.gdsamrat.qzz.io/) to see hosted version of this lab.
+
 ## Tech Used
 
 ### Frontend

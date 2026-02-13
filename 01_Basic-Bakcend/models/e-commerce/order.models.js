@@ -11,32 +11,6 @@ const orderItemSchema = new mongoose.Schema({
   },
 });
 
-const addressSchema = new mongoose.Schema({
-  country: {
-    type: String,
-    enum: [
-      "Bangladesh",
-      "United Kingdom",
-      "United States of America",
-      ,
-      "Canada",
-      "France",
-    ],
-    required: true,
-  },
-  state: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  postcode: {
-    type: Number,
-  },
-});
-
 const orderSchema = new mongoose.Schema(
   {
     orderPrice: {
@@ -50,9 +24,12 @@ const orderSchema = new mongoose.Schema(
     orderItems: {
       type: [orderItemSchema],
     },
-    address: {
-      type: [addressSchema],
-    },
+    address: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+      },
+    ],
     status: {
       type: String,
       enum: ["PENDING", "CANCELED", "ACCEPTED", "DELIVERED"],

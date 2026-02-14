@@ -1,5 +1,6 @@
 {
   "name": "my-monorepo",
+  "author": "Gouranga Das Samrat",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -11,7 +12,7 @@
     "dev:client": "npm run dev -w client",
     "dev:server": "npm run dev -w server",
     "start:server": "npm run start -w server",
-    "build:client": "npm run build -w client"
+    "build": "npm run build -w client"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

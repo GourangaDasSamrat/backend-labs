@@ -95,7 +95,7 @@ npm run dev:server
 To create a production build for the frontend:
 
 ```bash
-npm run build:client
+npm run build
 
 ```
 
@@ -104,7 +104,7 @@ npm run build:client
 This project is optimized for deployment on **Vercel** using the root `vercel.json` configuration.
 
 * **Install Command:** `npm install`
-* **Build Command:** `npm run build:client`
+* **Build Command:** `npm run build`
 * **Output Directory:** `client/dist`
 * **Root Directory:** `./`
 

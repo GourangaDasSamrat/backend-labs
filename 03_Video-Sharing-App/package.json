@@ -1,0 +1,16 @@
+{
+  "name": "video-sharing-app",
+  "version": "0.0.1",
+  "description": "Full stack video sharing app",
+  "repository": {
+    "type": "git",
+    "url": "github.com/GourangaDasSamrat/backend-labs/03_FullStack-Video-Sharing-App"
+  },
+  "license": "ISC",
+  "author": "Gouranga Das Samrat",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  }
+}

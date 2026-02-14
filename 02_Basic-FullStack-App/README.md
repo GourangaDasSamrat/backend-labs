@@ -1,104 +1,108 @@
 # Simple Jokes App
 
-Live preview
-Click [here](https://blab-2.gdsamrat.qzz.io/) to see hosted version of this lab.
+A full-stack application built with a **Monorepo** architecture using **npm workspaces**.
 
-## Tech Used
+[**Live Preview**](https://blab-2.gdsamrat.qzz.io/)
+
+---
+
+## 🚀 Tech Stack
 
 ### Frontend
-
-- React 19
-- Vite
-- Tailwind CSS
-- Axios
+- **React 19**
+- **Vite**
+- **Tailwind CSS**
+- **Axios**
 
 ### Backend
+- **Express JS**
 
-- Express JS
+---
 
-## Installation
+## 📦 Project Structure
+This repository is managed as a monorepo. Both the client and server live in the same root directory.
+- `/client`: React frontend application.
+- `/server`: Node.js Express backend API.
+
+---
+
+## 🛠️ Installation & Setup
 
 ### Prerequisites
+- **Node.js** (v18 or higher)
+- **npm** (v7+ for workspace support)
 
-- Node.js (v16 or higher)
-- npm or yarn or pnpm
-
-### Frontend
-
-### Clone Repository
-
+### 1. Clone the Repository
 ```bash
-# Clone the repository
 git clone https://github.com/GourangaDasSamrat/backend-labs
-
-# Navigate to project directory
-cd backend-labs/02_Basic-FullStack-App/client
+cd backend-labs
 
 ```
 
-### Install Dependencies
+### 2. Install Dependencies
+
+Since this is a monorepo, you can install all dependencies for both client and server from the root directory:
 
 ```bash
-# Using npm
-npm install
+npm run install:all
 
-# Or using yarn
-yarn install
-
-# Or using pnpm
-pnpm install
 ```
 
-### Development Server
+### 3. Development
+
+To run the client and server separately from the root:
+
+**Start Frontend (Client):**
 
 ```bash
-# Start development server
-npm run dev
-
+npm run dev:client
 # Application will be available at http://localhost:5173
-```
-
-### Build for Production
-
-```bash
-# Create production build
-npm run build
-
-# Preview production build
-npm run preview
-```
-
-### Backend
-
-### Clone Repository
-
-```bash
-# Clone the repository
-git clone https://github.com/GourangaDasSamrat/backend-labs
-
-# Navigate to project directory
-cd backend-labs/02_Basic-FullStack-App/serve
 
 ```
 
-### Install Dependencies
+**Start Backend Dev Server (Server):**
 
 ```bash
-# Using npm
-npm install
+npm run dev:server
+# Server will be available at http://localhost:3000 or the port you define in .env file
 
-# Or using yarn
-yarn install
+```
+**Start Backend (Server):**
 
-# Or using pnpm
-pnpm install
+```bash
+npm run dev:server
+# Server will be available at http://localhost:3000 or the port you define in .env file
+
 ```
 
-### Start Server
+---
+
+## 🏗️ Build & Deployment
+
+### Production Build
+
+To create a production build for the frontend:
 
 ```bash
-# Start development server
-npm start
+npm run build:client
 
-# Application will be available at http://localhost:3000 or the port you define on .env file
+```
+
+### Deployment (Vercel)
+
+This project is optimized for deployment on **Vercel** using the root `vercel.json` configuration.
+
+* **Install Command:** `npm run install:client`
+* **Build Command:** `npm run build:client`
+* **Output Directory:** `client/dist`
+* **Root Directory:** `./`
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env` file inside the `server` directory:
+
+```bash
+PORT=3000
 ```

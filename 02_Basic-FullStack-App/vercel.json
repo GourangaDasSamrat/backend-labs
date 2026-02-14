@@ -13,8 +13,8 @@
   ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/server/index.js"
+      "source": "/api/:path*",
+      "destination": "https://api.blab-2.gdsamrat.qzz.io/api/:path*"
     },
     {
       "source": "/(.*)",

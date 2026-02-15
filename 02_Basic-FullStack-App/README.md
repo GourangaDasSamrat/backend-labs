@@ -35,7 +35,7 @@ This repository is managed as a monorepo. Both the client and server live in the
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/GourangaDasSamrat/backend-labs
-cd backend-labs
+cd backend-labs/02_Basic-FullStack-App/
 
 ```
 

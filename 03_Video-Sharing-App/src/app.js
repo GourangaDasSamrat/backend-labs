@@ -12,7 +12,7 @@ const limit = "16kb";
 // configure cors for cross origin connection
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN, // frontend app's url
+    origin: process.env.CORS_ALLOWED_ORIGINS, // frontend app's url
     credentials: true, // allow credentials
   })
 );

@@ -2,8 +2,11 @@
 
 - Express JS
 - Mongoose
+- Mongoose Aggregate Paginate
 - CORS
 - Cookie parser
+- bcrypt
+- jsonwebtoken
 
 # Dev dependencies
 
@@ -52,4 +55,12 @@ MONGODB_URI = YOUR_MONGODB_URL; // your local mongodb url or your mongodb atlas(
 
 // CORS Origin
 CORS_ORIGIN = YOUR_CORS_ORIGIN; // your frontend app url or use * to accept request from anywhere(but its not recommended)
+
+// Access Tokens
+ACCESS_TOKEN_SECRET=YOUR_HASH_TOKEN //your hash token(you can use any kinda encryption method)
+ACCESS_TOKEN_EXPIRY=YOUR_ACCESS_TOKEN_EXPIRY_TIME // your access token expiry time whatever you want (recommended 1d)
+
+// Refresh Tokes
+REFRESH_TOKEN_SECRET=YOUR_HASH_TOKEN //your hash token(you can use any kinda encryption method)
+REFRESH_TOKEN_EXPIRY=YOUR_REFRESH_TOKEN_EXPIRY_TIME // your refresh token expiry time whatever you want (recommended 10d)
 ```

@@ -3,6 +3,8 @@
 - Express JS
 - Mongoose
 - Mongoose Aggregate Paginate
+- Cloudinary
+- Multer
 - CORS
 - Cookie parser
 - bcrypt

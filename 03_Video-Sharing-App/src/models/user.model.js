@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { Schema, Types, model } from "mongoose";
 

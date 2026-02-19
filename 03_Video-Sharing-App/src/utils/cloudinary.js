@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
@@ -16,7 +17,9 @@ export const uploadOnCloudinary = async (localFilePath) => {
     //upload the file on cloudinary
     const res = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
+      upload_preset: "backend-labs",
     });
+
     console.log("File is uploaded on cloudinary", res.url);
     return res;
   } catch (err) {

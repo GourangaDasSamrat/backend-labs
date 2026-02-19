@@ -1,5 +1,5 @@
 import "dotenv/config";
-import app from './app.js';
+import app from "./app.js";
 import connectDB from "./db/index.js";
 
 // connect database
@@ -12,7 +12,7 @@ connectDB()
     process.exit(1);
   });
 
-  // use it when run locally
+// use it when run locally
 if (process.env.NODE_ENV !== "production") {
   const port = process.env.PORT || 3000;
   app.listen(port, () => {

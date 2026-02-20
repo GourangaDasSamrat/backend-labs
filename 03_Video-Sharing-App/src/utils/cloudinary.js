@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
+import { deleteLocalFile } from "./fileHelper.js";
 
 // cloudinary config
 cloudinary.config({
@@ -12,20 +12,14 @@ cloudinary.config({
 export const uploadOnCloudinary = async (localFilePath) => {
   try {
     if (!localFilePath) return null;
-
-    //upload the file on cloudinary
     const res = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
       upload_preset: "backend-labs",
     });
-
-    // delete local temp file
-    fs.unlinkSync(localFilePath);
-
+    deleteLocalFile(localFilePath);
     return res;
   } catch (err) {
-    // delete local temp file
-    fs.unlinkSync(localFilePath);
+    deleteLocalFile(localFilePath);
     return null;
   }
 };

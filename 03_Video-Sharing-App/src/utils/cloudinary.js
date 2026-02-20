@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
@@ -20,7 +19,9 @@ export const uploadOnCloudinary = async (localFilePath) => {
       upload_preset: "backend-labs",
     });
 
-    console.log("File is uploaded on cloudinary", res.url);
+    // delete local temp file
+    fs.unlinkSync(localFilePath);
+
     return res;
   } catch (err) {
     // delete local temp file

@@ -5,6 +5,12 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary as upload } from "../utils/cloudinary.js";
 import { deleteLocalFile } from "../utils/fileHelper.js";
 
+// secure cookies options
+const options = {
+  httpOnly: true,
+  secure: true,
+};
+
 // generate access & refresh tokens
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -137,12 +143,6 @@ export const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken"
   );
 
-  // secure cookies options
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   // Return response
   return res
     .status(201)
@@ -159,4 +159,30 @@ export const loginUser = asyncHandler(async (req, res) => {
         "User logged in successfully"
       )
     );
+});
+
+// logout user
+export const logoutUser = asyncHandler(async (req, res) => {
+  // extract user id from request
+  const userId = req.user._id;
+
+  // find user by id and remove refresh token
+  await User.findByIdAndUpdate(
+    userId,
+    {
+      $set: {
+        refreshToken: undefined,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  // return response
+  return res
+    .status(201)
+    .clearCokie("accessToken", options)
+    .clearCokie("refreshToken", options)
+    .json(new response(201, {}, "User logged out successfully"));
 });

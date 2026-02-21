@@ -2,10 +2,10 @@ import multer from "multer";
 import path from "path";
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (_, _, cb) {
     cb(null, "./public/temp/");
   },
-  filename: function (req, file, cb) {
+  filename: function (_, file, cb) {
     const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`;
     cb(null, uniqueName);
   },

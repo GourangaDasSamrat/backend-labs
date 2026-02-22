@@ -113,13 +113,13 @@ export const loginUser = asyncHandler(async (req, res) => {
   email = email?.trim().toLowerCase();
 
   // Check username & email not exist
-  if (!userName || !email) {
+  if (!userName && !email) {
     throw new ApiError(400, "Username or email required");
   }
 
   // Check username or email
   const user = await User.findOne({
-    $or: [{ userName }, { email }],
+    $or: [...(userName ? [{ userName }] : []), ...(email ? [{ email }] : [])],
   });
 
   if (!user) {
@@ -139,7 +139,7 @@ export const loginUser = asyncHandler(async (req, res) => {
   );
 
   // update refresh tokens on user
-  const loggedInUser = User.findById(user._id).select(
+  const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
 
@@ -182,7 +182,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
   // return response
   return res
     .status(201)
-    .clearCokie("accessToken", options)
-    .clearCokie("refreshToken", options)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
     .json(new response(201, {}, "User logged out successfully"));
 });

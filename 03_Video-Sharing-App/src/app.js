@@ -37,9 +37,14 @@ const swaggerOptions = {
   apis: ["./docs/*.yaml"],
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+const uiOptions = {
+  customSiteTitle: "Video Share API | Docs",
+  customfavIcon: "/favicon.svg",
+};
 
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+//serve docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, uiOptions));
 // configure cors for cross origin connection
 app.use(
   cors({

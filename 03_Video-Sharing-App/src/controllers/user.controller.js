@@ -343,3 +343,38 @@ export const updateAccountAvatar = asyncHandler(async (req, res) => {
     .status(200)
     .json(new response(200, avatar, "Avatar update successfully"));
 });
+
+// update account cover
+export const updateAccountCover = asyncHandler(async (req, res) => {
+  // extract cover image file
+  const coverImageLocalPath = req.file?.path;
+
+  if (!coverImageLocalPath) {
+    throw new ApiError(400, "Cover image file is missing");
+  }
+
+  // upload cover image on cloudinary
+  const coverImage = await upload(coverImageLocalPath);
+
+  if (!coverImage.url) {
+    throw new ApiError(
+      500,
+      "Something went wrong when upload cover image file"
+    );
+  }
+
+  // update cover image url on database
+  await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        coverImage: coverImage.url,
+      },
+    },
+    { after: true }
+  ).select("-password");
+
+  return res
+    .status(200)
+    .json(new response(200, avatar, "Cover image update successfully"));
+});

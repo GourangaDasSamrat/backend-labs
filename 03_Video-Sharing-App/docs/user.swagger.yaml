@@ -1,0 +1,277 @@
+/api/v1/users/register:
+  post:
+    summary: Register a new user
+    description: Creates a new user account with required fields and uploads avatar & cover image to Cloudinary.
+    tags: [Users]
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            required:
+              - userName
+              - email
+              - password
+              - fullname
+              - avatar
+            properties:
+              userName: { type: string, description: User's unique username }
+              email:
+                {
+                  type: string,
+                  format: email,
+                  description: User's email address,
+                }
+              password:
+                { type: string, format: password, description: Strong password }
+              fullname: { type: string, description: Full name of the user }
+              avatar:
+                {
+                  type: string,
+                  format: binary,
+                  description: Avatar image file (Required),
+                }
+              coverImage:
+                {
+                  type: string,
+                  format: binary,
+                  description: Cover image file (Optional),
+                }
+    responses:
+      201:
+        description: User registered successfully
+      400:
+        description: Bad Request - Missing required fields or avatar
+      409:
+        description: Conflict - User with username or email already exists
+      500:
+        description: Internal Server Error - Registration or image upload failed
+
+/api/v1/users/login:
+  post:
+    summary: Login user
+    description: Authenticates a user using either username or email and returns access & refresh tokens in cookies.
+    tags: [Users]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - password
+            properties:
+              userName:
+                {
+                  type: string,
+                  description: Username (optional if email is provided),
+                }
+              email:
+                {
+                  type: string,
+                  format: email,
+                  description: Email (optional if userName is provided),
+                }
+              password:
+                { type: string, format: password, description: User password }
+    responses:
+      201:
+        description: User logged in successfully
+      400:
+        description: Bad Request - Username or email required
+      401:
+        description: Unauthorized - Invalid user credentials
+      404:
+        description: Not Found - User does not exist
+      500:
+        description: Internal Server Error - Token generation failed
+
+/api/v1/users/logout:
+  post:
+    summary: Logout user
+    description: Logs out the current user by removing the refresh token from DB and clearing tokens from cookies.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    responses:
+      201:
+        description: User logged out successfully
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/users/refresh-tokens:
+  post:
+    summary: Refresh access token
+    description: Generates a new access token and refresh token using a valid refresh token from cookies or body.
+    tags: [Users]
+    requestBody:
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              refreshToken:
+                {
+                  type: string,
+                  description: Refresh token (optional if sent via cookie),
+                }
+    responses:
+      200:
+        description: Access token refreshed successfully
+      401:
+        description: Unauthorized - Invalid, expired, or used refresh token
+      500:
+        description: Internal Server Error - Token generation failed
+
+/api/v1/users/change-password:
+  post:
+    summary: Change user password
+    description: Allows an authenticated user to change their current password.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - oldPassword
+              - newPassword
+              - confPassword
+            properties:
+              oldPassword:
+                {
+                  type: string,
+                  format: password,
+                  description: Current password,
+                }
+              newPassword:
+                { type: string, format: password, description: New password }
+              confPassword:
+                {
+                  type: string,
+                  format: password,
+                  description: Confirm new password,
+                }
+    responses:
+      200:
+        description: Password changed successfully
+      400:
+        description: Bad Request - New password mismatch or invalid old password
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/users/current-user:
+  get:
+    summary: Get current user details
+    description: Fetches the profile details of the currently authenticated user.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Current user fetched successfully
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/users/update-account:
+  patch:
+    summary: Update account details
+    description: Updates the user's fullname, email, and username.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - fullname
+              - email
+              - userName
+            properties:
+              fullname: { type: string, description: Updated full name }
+              email:
+                {
+                  type: string,
+                  format: email,
+                  description: Updated email address,
+                }
+              userName: { type: string, description: Updated username }
+    responses:
+      200:
+        description: Account details updated successfully
+      400:
+        description: Bad Request - All fields are required
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/users/avatar:
+  patch:
+    summary: Update user avatar
+    description: Uploads a new avatar image to Cloudinary and updates the user profile.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            required:
+              - avatar
+            properties:
+              avatar:
+                {
+                  type: string,
+                  format: binary,
+                  description: New avatar image file,
+                }
+    responses:
+      200:
+        description: Avatar updated successfully
+      400:
+        description: Bad Request - Avatar file is missing
+      401:
+        description: Unauthorized - User not authenticated
+      500:
+        description: Internal Server Error - Image upload failed
+
+/api/v1/users/cover-image:
+  patch:
+    summary: Update user cover image
+    description: Uploads a new cover image to Cloudinary and updates the user profile.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            required:
+              - coverImage
+            properties:
+              coverImage:
+                {
+                  type: string,
+                  format: binary,
+                  description: New cover image file,
+                }
+    responses:
+      200:
+        description: Cover image updated successfully
+      400:
+        description: Bad Request - Cover image file is missing
+      401:
+        description: Unauthorized - User not authenticated
+      500:
+        description: Internal Server Error - Image upload failed

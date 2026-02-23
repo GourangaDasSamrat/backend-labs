@@ -311,3 +311,35 @@ export const updateAccountDetails = asyncHandler(async (req, res) => {
     .status(200)
     .json(new response(200, user, "Updating account details successfully"));
 });
+
+// update account avatar
+export const updateAccountAvatar = asyncHandler(async (req, res) => {
+  // extract avatar file
+  const avatarLocalPath = req.file?.path;
+
+  if (!avatarLocalPath) {
+    throw new ApiError(400, "Avatar file is missing");
+  }
+
+  // upload avatar on cloudinary
+  const avatar = await upload(avatarLocalPath);
+
+  if (!avatar.url) {
+    throw new ApiError(500, "Something went wrong when upload avatar file");
+  }
+
+  // update avatar url on database
+  await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        avatar: avatar.url,
+      },
+    },
+    { after: true }
+  ).select("-password");
+
+  return res
+    .status(200)
+    .json(new response(200, avatar, "Avatar update successfully"));
+});

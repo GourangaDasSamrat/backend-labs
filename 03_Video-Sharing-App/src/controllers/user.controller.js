@@ -238,3 +238,36 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, err?.message || "Invalid refresh token", err);
   }
 });
+
+// change password
+export const changePassword = asyncHandler(async (req, res) => {
+  // extract old, new & conform passwords
+  const { oldPassword, newPassword, confPassword } = req.body;
+
+  // check new and conf pass is same or not
+  if (!(newPassword === confPassword)) {
+    throw new ApiError(400, "New password and conform password not matched");
+  }
+
+  // extract user id from middleware
+  const userId = req.user?._id;
+
+  // find user
+  const user = await User.findById(userId);
+
+  // check is old password correct
+  const isPasswordValid = await user.isPasswordCorrect(oldPassword);
+
+  if (!isPasswordValid) {
+    throw new ApiError(400, "Invalid old password");
+  }
+
+  // set new password
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  // return response
+  return res
+    .status(200)
+    .json(new response(200, {}, "Password changed successfully"));
+});

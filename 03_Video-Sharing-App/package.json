@@ -1,6 +1,6 @@
 {
   "name": "video-sharing-app",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Full stack video sharing app",
   "repository": {
     "type": "git",
@@ -25,7 +25,9 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
     "mongoose-aggregate-paginate-v2": "^1.1.4",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

@@ -9,6 +9,8 @@
 - Cookie parser
 - bcrypt
 - jsonwebtoken
+- swagger-ui-express
+- swagger-jsdoc
 
 # Dev dependencies
 

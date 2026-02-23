@@ -278,3 +278,36 @@ export const getCurrentUser = asyncHandler(async (req, res) =>
     .status(200)
     .json(new response(200, req.user, "Current user fetched successfully"))
 );
+
+// update account details
+export const updateAccountDetails = asyncHandler(async (req, res) => {
+  // extract details
+  const { fullname, email, userName } = req.body;
+
+  if (!fullname || !email || !userName) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  // get user id from middleware
+  const userId = req.user?._id;
+
+  // find and update user
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      $set: {
+        fullname,
+        email,
+        userName,
+      },
+    },
+    {
+      after: true,
+    }
+  ).select("-password");
+
+  // return response
+  return res
+    .status(200)
+    .json(new response(200, user, "Updating account details successfully"));
+});

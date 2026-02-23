@@ -329,7 +329,7 @@ export const updateAccountAvatar = asyncHandler(async (req, res) => {
   }
 
   // update avatar url on database
-  await User.findByIdAndUpdate(
+  const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
@@ -341,7 +341,7 @@ export const updateAccountAvatar = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new response(200, avatar, "Avatar update successfully"));
+    .json(new response(200, user, "Avatar update successfully"));
 });
 
 // update account cover
@@ -364,7 +364,7 @@ export const updateAccountCover = asyncHandler(async (req, res) => {
   }
 
   // update cover image url on database
-  await User.findByIdAndUpdate(
+  const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
@@ -376,5 +376,5 @@ export const updateAccountCover = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new response(200, avatar, "Cover image update successfully"));
+    .json(new response(200, user, "Cover image update successfully"));
 });

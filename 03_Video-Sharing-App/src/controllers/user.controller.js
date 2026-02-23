@@ -271,3 +271,10 @@ export const changePassword = asyncHandler(async (req, res) => {
     .status(200)
     .json(new response(200, {}, "Password changed successfully"));
 });
+
+// get current user
+export const getCurrentUser = asyncHandler(async (req, res) =>
+  res
+    .status(200)
+    .json(new response(200, req.user, "Current user fetched successfully"))
+);

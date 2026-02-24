@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model.js";
+// import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse as response } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -377,4 +377,70 @@ export const updateAccountCover = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new response(200, user, "Cover image update successfully"));
+});
+
+// get user channel profile
+export const getUserChannelProfile = asyncHandler(async (req, res) => {
+  // extract params from request params
+  const { userName } = req.params;
+
+  if (!userName?.trim()) {
+    throw new ApiError(400, "Username is missing");
+  }
+
+  // aggregation pipeline to get subscriber & subscribed counts & isSubscribed status
+  const channel = await User.aggregate([
+    {
+      $match: {
+        userName: userName?.toLowerCase(),
+      },
+    },
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "channel",
+        as: "subscribers",
+      },
+    },
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "subscriber",
+        as: "subscribedTo",
+      },
+    },
+    {
+      $addFields: {
+        subscribersCount: {
+          $size: "$subscribers",
+        },
+        subscribedToCount: {
+          $size: "$subscribedTo",
+        },
+        isSubscribed: {
+          $cond: {
+            if: {
+              $in: [req.user?._id, "$subscribers.subscriber"],
+            },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        fullname: 1,
+        userName: 1,
+        email: 1,
+        avatar: 1,
+        coverImage: 1,
+        subscribersCount: 1,
+        subscribedToCount: 1,
+        isSubscribed: 1,
+      },
+    },
+  ]);
 });

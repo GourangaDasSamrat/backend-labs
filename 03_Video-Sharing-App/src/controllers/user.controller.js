@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-// import { User } from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse as response } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -443,4 +443,13 @@ export const getUserChannelProfile = asyncHandler(async (req, res) => {
       },
     },
   ]);
+
+  if (!channel?.length) {
+    throw new ApiError(404, "Channel does not exist");
+  }
+
+  // return response
+  return res
+    .status(200)
+    .json(new response(200, channel[0], "User channel fetched successfully"));
 });

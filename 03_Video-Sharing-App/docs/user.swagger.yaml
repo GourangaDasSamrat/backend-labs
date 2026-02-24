@@ -275,3 +275,91 @@
         description: Unauthorized - User not authenticated
       500:
         description: Internal Server Error - Image upload failed
+
+/api/v1/users/channel/{userName}:
+  get:
+    summary: Get user channel profile
+    description: Fetches a user's public profile including subscriber count, subscribed-to count, and checks if the current logged-in user is subscribed to this channel.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: userName
+        required: true
+        schema:
+          type: string
+        description: The unique username of the channel/user.
+    responses:
+      200:
+        description: User channel profile fetched successfully.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    fullname: { type: string }
+                    userName: { type: string }
+                    email: { type: string }
+                    avatar: { type: string }
+                    coverImage: { type: string }
+                    subscribersCount: { type: number }
+                    subscribedToCount: { type: number }
+                    isSubscribed: { type: boolean }
+                message:
+                  { type: string, example: "User channel fetched successfully" }
+      400:
+        description: Bad Request - Username is missing.
+      404:
+        description: Not Found - Channel does not exist.
+      401:
+        description: Unauthorized - Invalid or missing token.
+
+/api/v1/users/watch-history:
+  get:
+    summary: Get user watch history
+    description: Retrieves a list of all videos watched by the authenticated user, including detailed video information and video owner details.
+    tags: [Users]
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Watch history fetched successfully.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      _id: { type: string }
+                      videoFile: { type: string }
+                      thumbnail: { type: string }
+                      title: { type: string }
+                      description: { type: string }
+                      duration: { type: number }
+                      views: { type: number }
+                      isPublished: { type: boolean }
+                      owner:
+                        type: object
+                        properties:
+                          fullname: { type: string }
+                          userName: { type: string }
+                          avatar: { type: string }
+                message:
+                  {
+                    type: string,
+                    example: "Watch history fetched successfully",
+                  }
+      401:
+        description: Unauthorized - User not authenticated.
+      500:
+        description: Internal Server Error.

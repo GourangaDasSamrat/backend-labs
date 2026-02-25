@@ -11,6 +11,7 @@
 - jsonwebtoken
 - swagger-ui-express
 - swagger-jsdoc
+- tsx
 
 # Dev dependencies
 

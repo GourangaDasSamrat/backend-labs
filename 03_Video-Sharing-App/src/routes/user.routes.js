@@ -11,9 +11,9 @@ import {
   updateAccountAvatar,
   updateAccountCover,
   updateAccountDetails,
-} from "../controllers/user.controller";
-import { verifyAuth } from "../middlewares/auth.middleware";
-import { multerUpload } from "../middlewares/multer.middleware";
+} from "../controllers/user.controller.js";
+import { verifyAuth } from "../middlewares/auth.middleware.js";
+import { multerUpload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 

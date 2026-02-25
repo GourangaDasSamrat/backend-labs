@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model";
 import { Types } from "mongoose";
+import { User } from "../models/user.model";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse as response } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
@@ -172,8 +172,8 @@ export const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     userId,
     {
-      $set: {
-        refreshToken: undefined,
+      $unset: {
+        refreshToken: 1,
       },
     },
     {

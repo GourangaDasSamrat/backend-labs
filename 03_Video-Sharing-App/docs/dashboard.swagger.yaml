@@ -1,0 +1,61 @@
+/api/v1/dashboard/stats:
+  get:
+    summary: Get channel stats
+    description: Returns aggregated statistics for the authenticated user's channel — total videos, total views, total likes across all videos, and total subscribers.
+    tags: [Dashboard]
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Channel stats fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    totalVideos: { type: number, example: 24 }
+                    totalViews: { type: number, example: 150000 }
+                    totalLikes: { type: number, example: 8400 }
+                    totalSubscribers: { type: number, example: 3200 }
+                message: { type: string, example: "Channel stats fetched successfully" }
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/dashboard/videos:
+  get:
+    summary: Get channel videos
+    description: Returns all videos uploaded by the authenticated user's channel, sorted newest first. Each video includes a computed likes count.
+    tags: [Dashboard]
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Channel videos fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      _id: { type: string }
+                      videoFile: { type: string }
+                      thumbnail: { type: string }
+                      title: { type: string }
+                      description: { type: string }
+                      duration: { type: number }
+                      views: { type: number }
+                      isPublished: { type: boolean }
+                      likesCount: { type: number }
+                      createdAt: { type: string, format: date-time }
+                message: { type: string, example: "Channel videos fetched successfully" }
+      401:
+        description: Unauthorized - User not authenticated

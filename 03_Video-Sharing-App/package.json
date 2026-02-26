@@ -1,0 +1,16 @@
+{
+  "name": "strea-mvault",
+  "author": "Gouranga Das Samrat",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm dev:client\" \"pnpm dev:server\"",
+    "dev:client": "pnpm --filter client dev",
+    "dev:server": "pnpm --filter server dev",
+    "start:server": "pnpm --filter server start",
+    "build": "pnpm --filter client build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

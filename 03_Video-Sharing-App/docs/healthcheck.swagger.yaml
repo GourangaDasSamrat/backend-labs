@@ -1,0 +1,19 @@
+/api/v1/healthcheck:
+  get:
+    summary: Health check
+    description: Returns a simple OK status to verify the server is up and running. No authentication required.
+    tags: [Healthcheck]
+    responses:
+      200:
+        description: Server is up and running
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    status: { type: string, example: "OK" }
+                message: { type: string, example: "Server is up and running" }

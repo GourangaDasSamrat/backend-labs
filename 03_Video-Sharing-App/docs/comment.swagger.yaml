@@ -1,0 +1,176 @@
+/api/v1/comments/{videoId}:
+  get:
+    summary: Get comments for a video
+    description: Fetches a paginated list of comments for a specific video, sorted by newest first, including commenter details.
+    tags: [Comments]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: videoId
+        required: true
+        schema: { type: string }
+        description: The ID of the video
+      - in: query
+        name: page
+        schema: { type: integer, default: 1 }
+        description: Page number for pagination
+      - in: query
+        name: limit
+        schema: { type: integer, default: 10 }
+        description: Number of comments per page
+    responses:
+      200:
+        description: Comments fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    docs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          _id: { type: string }
+                          content: { type: string }
+                          createdAt: { type: string, format: date-time }
+                          owner:
+                            type: object
+                            properties:
+                              userName: { type: string }
+                              fullname: { type: string }
+                              avatar: { type: string }
+                    totalDocs: { type: number }
+                    page: { type: number }
+                    totalPages: { type: number }
+                message: { type: string, example: "Comments fetched successfully" }
+      400:
+        description: Bad Request - Invalid video ID
+      401:
+        description: Unauthorized - User not authenticated
+
+  post:
+    summary: Add a comment to a video
+    description: Creates a new comment on a specific video for the authenticated user.
+    tags: [Comments]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: videoId
+        required: true
+        schema: { type: string }
+        description: The ID of the video to comment on
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content: { type: string, description: The comment text }
+    responses:
+      201:
+        description: Comment added successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 201 }
+                data:
+                  type: object
+                  properties:
+                    _id: { type: string }
+                    content: { type: string }
+                    video: { type: string }
+                    owner: { type: string }
+                    createdAt: { type: string, format: date-time }
+                message: { type: string, example: "Comment added successfully" }
+      400:
+        description: Bad Request - Invalid video ID or empty content
+      401:
+        description: Unauthorized - User not authenticated
+      500:
+        description: Internal Server Error - Failed to add comment
+
+/api/v1/comments/channel/{commentId}:
+  patch:
+    summary: Update a comment
+    description: Updates the content of an existing comment. Only the comment owner can update it.
+    tags: [Comments]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: commentId
+        required: true
+        schema: { type: string }
+        description: The ID of the comment to update
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content: { type: string, description: Updated comment text }
+    responses:
+      200:
+        description: Comment updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    _id: { type: string }
+                    content: { type: string }
+                    video: { type: string }
+                    owner: { type: string }
+                    updatedAt: { type: string, format: date-time }
+                message: { type: string, example: "Comment updated successfully" }
+      400:
+        description: Bad Request - Invalid comment ID or empty content
+      401:
+        description: Unauthorized - User not authenticated
+      403:
+        description: Forbidden - Not authorized to update this comment
+      404:
+        description: Not Found - Comment not found
+
+  delete:
+    summary: Delete a comment
+    description: Deletes a comment by its ID. Only the comment owner can delete it.
+    tags: [Comments]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: commentId
+        required: true
+        schema: { type: string }
+        description: The ID of the comment to delete
+    responses:
+      200:
+        description: Comment deleted successfully
+      400:
+        description: Bad Request - Invalid comment ID
+      401:
+        description: Unauthorized - User not authenticated
+      403:
+        description: Forbidden - Not authorized to delete this comment
+      404:
+        description: Not Found - Comment not found

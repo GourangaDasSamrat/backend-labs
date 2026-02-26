@@ -1,8 +1,13 @@
 {
   "name": "stream-vault",
   "author": "Gouranga Das Samrat",
+  "license": "ISC",
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "github.com/GourangaDasSamrat/backend-labs/03_FullStack-Video-Sharing-App"
+  },
   "scripts": {
     "dev": "concurrently \"pnpm dev:client\" \"pnpm dev:server\"",
     "dev:client": "pnpm --filter client dev",

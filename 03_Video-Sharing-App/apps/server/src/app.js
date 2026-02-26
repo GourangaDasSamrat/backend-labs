@@ -18,9 +18,9 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Video Share",
+      title: "Stream Vault",
       version: "1.0.0",
-      description: "API documentation using Swagger",
+      description: "Stream Vault api documentation",
     },
     servers: [{ url: `http://localhost:${port}` }],
     components: {
@@ -34,12 +34,12 @@ const swaggerOptions = {
     },
   },
   // docs file
-  apis: ["./docs/*.yaml"],
+  apis: ["../../../docs/*.yaml"],
 };
 
 const uiOptions = {
-  customSiteTitle: "Video Share API | Docs",
-  customfavIcon: "/favicon.svg",
+  customSiteTitle: "Stream Vault | Api Docs",
+  customfavIcon: "../../../libs/img/favicon.svg",
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

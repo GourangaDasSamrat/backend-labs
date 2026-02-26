@@ -1,53 +1,16 @@
-## Tech stack
+# Server
 
-- Express JS
-- Mongoose
-- Mongoose Aggregate Paginate
-- Cloudinary
-- Multer
-- CORS
-- Cookie parser
-- bcrypt
-- jsonwebtoken
-- swagger-ui-express
-- swagger-jsdoc
-- tsx
+Backend for StreamVault.
 
-# Dev dependencies
+## Tech Stack
 
-- Prettier
-
-## Start development
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/GourangaDasSamrat/backend-labs
-cd backend-labs//03_Video-Sharing-App
-
-```
-
-### 2. Install Dependencies
-
-```bash
-npm install
-
-```
-
-### 3. Start Server (backend)
-
-```bash
-npm run dev
-
-```
-
-## Environment variables
-
-1. Copy `.env.example` to `.env`
-
-```bash
-cp .env.example .env
-
-```
-
-2. Fill the `.env` with your actual data
+| Technology                                                                | Description              |
+| ------------------------------------------------------------------------- | ------------------------ |
+| [Node.js](https://nodejs.org/) + [Express 5](https://expressjs.com/)      | Runtime & web framework  |
+| [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) | Database & ODM           |
+| [Cloudinary](https://cloudinary.com/)                                     | Media storage & delivery |
+| [Multer](https://github.com/expressjs/multer)                             | File upload handling     |
+| [JWT](https://jwt.io/)                                                    | Authentication           |
+| [bcrypt](https://github.com/kelektiv/node.bcrypt.js)                      | Password hashing         |
+| [Swagger UI](https://swagger.io/tools/swagger-ui/)                        | API documentation        |
+| [tsx](https://github.com/privatenumber/tsx)                               | TypeScript/ESM execution |

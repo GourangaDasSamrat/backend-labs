@@ -1,0 +1,172 @@
+/api/v1/likes/toggle/v/{videoId}:
+  post:
+    summary: Toggle like on a video
+    description: Likes or unlikes a video for the authenticated user. Acts as a toggle — if already liked, it unlikes; otherwise it likes.
+    tags: [Likes]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: videoId
+        required: true
+        schema: { type: string }
+        description: The ID of the video to like/unlike
+    responses:
+      200:
+        description: Video unliked successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    liked: { type: boolean, example: false }
+                message: { type: string, example: "Video unliked successfully" }
+      201:
+        description: Video liked successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 201 }
+                data:
+                  type: object
+                  properties:
+                    liked: { type: boolean, example: true }
+                message: { type: string, example: "Video liked successfully" }
+      400:
+        description: Bad Request - Invalid video ID
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/likes/toggle/c/{commentId}:
+  post:
+    summary: Toggle like on a comment
+    description: Likes or unlikes a comment for the authenticated user. Acts as a toggle — if already liked, it unlikes; otherwise it likes.
+    tags: [Likes]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: commentId
+        required: true
+        schema: { type: string }
+        description: The ID of the comment to like/unlike
+    responses:
+      200:
+        description: Comment unliked successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    liked: { type: boolean, example: false }
+                message: { type: string, example: "Comment unliked successfully" }
+      201:
+        description: Comment liked successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 201 }
+                data:
+                  type: object
+                  properties:
+                    liked: { type: boolean, example: true }
+                message: { type: string, example: "Comment liked successfully" }
+      400:
+        description: Bad Request - Invalid comment ID
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/likes/toggle/p/{postId}:
+  post:
+    summary: Toggle like on a post
+    description: Likes or unlikes a community post for the authenticated user. Acts as a toggle — if already liked, it unlikes; otherwise it likes.
+    tags: [Likes]
+    security:
+      - bearerAuth: []
+    parameters:
+      - in: path
+        name: postId
+        required: true
+        schema: { type: string }
+        description: The ID of the post to like/unlike
+    responses:
+      200:
+        description: Post unliked successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: object
+                  properties:
+                    liked: { type: boolean, example: false }
+                message: { type: string, example: "Post unliked successfully" }
+      201:
+        description: Post liked successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 201 }
+                data:
+                  type: object
+                  properties:
+                    liked: { type: boolean, example: true }
+                message: { type: string, example: "Post liked successfully" }
+      400:
+        description: Bad Request - Invalid post ID
+      401:
+        description: Unauthorized - User not authenticated
+
+/api/v1/likes/videos:
+  get:
+    summary: Get all liked videos
+    description: Returns a list of all videos liked by the authenticated user, including full video details and owner information.
+    tags: [Likes]
+    security:
+      - bearerAuth: []
+    responses:
+      200:
+        description: Liked videos fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: { type: number, example: 200 }
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      _id: { type: string }
+                      videoFile: { type: string }
+                      thumbnail: { type: string }
+                      title: { type: string }
+                      description: { type: string }
+                      duration: { type: number }
+                      views: { type: number }
+                      owner:
+                        type: object
+                        properties:
+                          userName: { type: string }
+                          fullname: { type: string }
+                          avatar: { type: string }
+                message: { type: string, example: "Liked videos fetched successfully" }
+      401:
+        description: Unauthorized - User not authenticated

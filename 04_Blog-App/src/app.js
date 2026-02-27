@@ -26,12 +26,25 @@ app.use(
   }),
 );
 
+// config url encoder
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
 // configure ejs
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./src/views"));
 
 // serve page
-app.get("/", (req, res) => res.render("home"));
+app.get("/", (_, res) => res.render("home"));
+
+// import routes
+import { userRouter } from "./routes/index.js";
+
+// declare routes
+app.use("/users", userRouter);
 
 // export initialized express app
 export default app;

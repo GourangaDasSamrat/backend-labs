@@ -72,8 +72,8 @@ userSchema.pre("save", function () {
 });
 
 // hash password and check when signin
-userSchema.static("matchPassword", function (email, password) {
-  const user = this.findOne({ email });
+userSchema.static("matchPassword", async function (email, password) {
+  const user = await this.findOne({ email });
 
   if (!user) throw new ApiError(404, "User not found");
 

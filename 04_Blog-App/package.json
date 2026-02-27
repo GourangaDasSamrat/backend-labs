@@ -1,6 +1,7 @@
 {
   "name": "blog-app",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -12,6 +13,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.30.2",
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "ejs": "^4.0.1",
     "express": "^5.2.1",

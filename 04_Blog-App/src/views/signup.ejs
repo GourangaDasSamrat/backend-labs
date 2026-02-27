@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Signup | Blogify</title>
+  </head>
+  <body class="bg-light">
+    <%- include('./partials/navbar') %>
+
+    <div class="container">
+      <div class="row justify-content-center align-items-center vh-100">
+        <div class="col-12 col-md-8 col-lg-5">
+          <div class="card shadow-sm border-0 px-4 py-5">
+            <div class="card-body">
+              <div class="text-center mb-4">
+                <h2 class="fw-bold">Create Account</h2>
+                <p class="text-muted">Join the Blogify community today.</p>
+              </div>
+
+              <form
+                class="needs-validation"
+                action="/users/signup"
+                method="post"
+                novalidate
+              >
+                <div class="mb-3">
+                  <label for="fullname" class="form-label fw-semibold"
+                    >Full Name</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullname"
+                    placeholder="Enter your name"
+                    required
+                    name="fullname"
+                  />
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label fw-semibold"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                    name="email"
+                  />
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="username" class="form-label fw-semibold"
+                    >Username</label
+                  >
+                  <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend"
+                      >@</span
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="username"
+                      placeholder="username"
+                      required
+                      name="username"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label fw-semibold"
+                    >Password</label
+                  >
+                  <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    aria-describedby="passwordHelpBlock"
+                    required
+                    name="password"
+                  />
+                  <div id="passwordHelpBlock" class="form-text">
+                    Must be 8-20 characters long and include letters and
+                    numbers.
+                  </div>
+                </div>
+
+                <div class="d-grid">
+                  <button class="btn btn-primary btn-lg" type="submit">
+                    Sign up
+                  </button>
+                </div>
+
+                <div class="text-center mt-3">
+                  <p class="small mb-0">
+                    Already have an account?
+                    <a href="/login" class="text-decoration-none">Log in</a>
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

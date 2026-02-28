@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { createHmac, randomBytes } from "node:crypto";
 import { ApiError } from "../utils/ApiError.js";
+import { createTokenForUser } from "../utils/auth.js";
 
 const userSchema = new Schema(
   {
@@ -72,7 +73,7 @@ userSchema.pre("save", function () {
 });
 
 // hash password and check when signin
-userSchema.static("matchPassword", async function (email, password) {
+userSchema.static("matchPasswordAndGenerateToken", async function (email, password) {
   const user = await this.findOne({ email });
 
   if (!user) throw new ApiError(404, "User not found");
@@ -87,7 +88,9 @@ userSchema.static("matchPassword", async function (email, password) {
   if (hashedPassword !== userProvidedHash)
     throw new ApiError(400, "Incorrect password");
 
-  return { ...user, password: undefined, salt: undefined };
+  const token = createTokenForUser(user);
+
+  return token;
 });
 
 export const User = model("User", userSchema);

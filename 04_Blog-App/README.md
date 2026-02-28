@@ -3,5 +3,6 @@
 - Express JS
 - Mongoose
 - EJS
-- Cors
 - Bootstrap
+- Cors
+- JWT

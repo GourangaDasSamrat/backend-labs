@@ -1,6 +1,7 @@
 import { Blog } from '../models/blog.model.js'
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { uploadOnCloudinary as upload } from "../utils/cloudinary.js";
 
 export const addNewBlog = asyncHandler(async (req, res) => {
   // extract blog title and and body from request body
@@ -14,7 +15,7 @@ export const addNewBlog = asyncHandler(async (req, res) => {
   }
 
   // extract cover
-  const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
+  const coverImageLocalPath = req.file?.path;;
 
   // upload cover
   const coverImage = coverImageLocalPath
@@ -25,7 +26,8 @@ export const addNewBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.create({
     title,
     body,
-    coverImage: coverImage?.url || "",
+    coverImage:
+      coverImage?.url || "https://i.postimg.cc/RZ68Y7TF/theme-nord.png",
     createdBy: req.user._id,
   });
 

@@ -4,5 +4,7 @@
 - Mongoose
 - EJS
 - Bootstrap
+- Multer
+- Cloudinary
 - Cors
 - JWT

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head'); %>
+    <title>Add new blog | Blogify</title>
+  </head>
+  <body>
+    <div><%- include('./partials/navbar')%></div>
+
+    <form
+      class="container mt-3"
+      action="/blog/add-new"
+      method="post"
+      novalidate
+    >
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="Blog title"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="body" class="form-label">Content</label>
+        <textarea
+          class="form-control"
+          id="body"
+          name="body"
+          rows="8"
+          required
+          placeholder="Blog content"
+        ></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="cover" class="form-label"
+          >Upload cover image ( only png or webp )</label
+        >
+        <input
+          class="form-control"
+          type="file"
+          id="cover"
+          name="coverImage"
+          accept=".webp, .png"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <%- include('./partials/scripts'); %>
+  </body>
+</html>

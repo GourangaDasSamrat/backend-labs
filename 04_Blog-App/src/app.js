@@ -1,3 +1,4 @@
+import { Blog } from './models/blog.model.js'
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -46,11 +47,13 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve("./src/views"));
 
 // serve page
-app.get("/", (req, res) =>
+app.get("/", async (req, res) => {
+  const allBlogs = await Blog.find({});
   res.render("home", {
     user: req.user,
-  }),
-);
+    blogs: allBlogs,
+  });
+});
 
 // import routes
 import { blogRoutes, userRouter } from "./routes/index.js";

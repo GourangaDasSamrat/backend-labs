@@ -1,0 +1,175 @@
+<style>
+  /* ─── CSS Variables ─── */
+  :root {
+    --bs-body-bg: #0d0d0f;
+    --bs-body-color: #e8e8f0;
+    --bs-border-color: #2a2a35;
+    --bg-card: #13131a;
+    --bg-elevated: #1a1a24;
+    --accent: #f0c040;
+    --accent-muted: rgba(240, 192, 64, 0.12);
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* ─── Base ─── */
+  body {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    font-family: var(--font-body);
+  }
+
+  /* ─── Navbar ─── */
+  .navbar-dark-custom {
+    background: rgba(13, 13, 15, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .navbar-brand-custom {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff !important;
+    letter-spacing: -0.03em;
+  }
+  .navbar-brand-custom .brand-dot { color: var(--accent); }
+
+  /* Avatar gradient ring */
+  .avatar-ring {
+    padding: 2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #e07040);
+    display: inline-block;
+    line-height: 0;
+  }
+  .avatar-ring img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-card);
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ─── Cards ─── */
+  .card-dark {
+    background: var(--bg-card);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 14px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-dark:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240, 192, 64, 0.35);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+  .blog-cover {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+  }
+
+  /* ─── Accent button ─── */
+  .btn-accent {
+    background-color: var(--accent);
+    color: #0d0d0f;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .btn-accent:hover {
+    background-color: #d4a832;
+    color: #0d0d0f;
+    transform: translateY(-1px);
+  }
+
+  /* ─── Form controls ─── */
+  .form-control-dark,
+  .form-control-dark:focus {
+    background-color: var(--bg-elevated);
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+    border-radius: 8px;
+  }
+  .form-control-dark:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-muted);
+  }
+  .form-control-dark::placeholder { color: #555568; }
+
+  .input-group-dark .input-group-text {
+    background: var(--bg-elevated);
+    border-color: var(--bs-border-color);
+    color: #888899;
+  }
+
+  /* ─── Auth card ─── */
+  .auth-card {
+    background: var(--bg-card);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 18px;
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ─── Section / display headings ─── */
+  .display-font { font-family: var(--font-display); }
+
+  /* ─── Hero section ─── */
+  .hero-glow {
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(240,192,64,0.07) 0%, transparent 70%);
+  }
+
+  /* ─── CTA unauthenticated ─── */
+  .cta-card {
+    background: var(--bg-card);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 18px;
+    background-image: radial-gradient(ellipse 50% 80% at 50% 100%, rgba(240,192,64,0.05) 0%, transparent 70%);
+  }
+
+  /* ─── Dropdown ─── */
+  .dropdown-menu-dark-custom {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--bs-border-color) !important;
+    border-radius: 10px !important;
+  }
+  .dropdown-menu-dark-custom .dropdown-item {
+    color: #aaaabc;
+    border-radius: 6px;
+    font-size: 0.875rem;
+  }
+  .dropdown-menu-dark-custom .dropdown-item:hover {
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+  }
+
+  /* ─── Blog label badge ─── */
+  .badge-accent {
+    background: var(--accent-muted);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    padding: 3px 10px;
+  }
+
+  /* ─── Write page ─── */
+  textarea.form-control-dark { min-height: 260px; resize: vertical; }
+
+  /* ─── Alert error ─── */
+  .alert-dark-danger {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #f08080;
+    border-radius: 10px;
+  }
+
+  /* ─── Scrollbar ─── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bs-body-bg); }
+  ::-webkit-scrollbar-thumb { background: #2e2e3c; border-radius: 3px; }
+</style>

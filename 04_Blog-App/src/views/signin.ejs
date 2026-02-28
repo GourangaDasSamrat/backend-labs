@@ -1,76 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   <head>
     <%- include('./partials/head') %>
-    <title>Signin | Blogify</title>
+    <%- include('./partials/styles') %>
+    <title>Sign in — Blogify</title>
   </head>
-  <body class="bg-light">
+  <body>
+
     <%- include('./partials/navbar') %>
 
-    <div class="container">
-      <div class="row justify-content-center align-items-center vh-100">
-        <div class="col-12 col-md-8 col-lg-5">
-          <div class="card shadow-sm border-0 px-4 py-5">
-            <div class="card-body">
-              <div class="text-center mb-4">
-                <h2 class="fw-bold">Sign in Account</h2>
-                <p class="text-muted">Back to the Blogify community today.</p>
-              </div>
+    <div class="container py-5">
+      <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="col-12 col-sm-9 col-md-6 col-lg-5 col-xl-4">
 
-              <form
-                class="needs-validation"
-                action="/users/signin"
-                method="post"
-                novalidate
-              >
-                <div class="mb-3">
-                  <label for="email" class="form-label fw-semibold"
-                    >Email</label
-                  >
+          <!-- Logo -->
+          <div class="text-center mb-4">
+            <a href="/" class="text-decoration-none display-font fw-bold" style="font-size:2rem; color:#fff; letter-spacing:-0.03em;">
+              Blogify<span style="color:var(--accent);">.</span>
+            </a>
+            <p class="text-secondary small mt-1 mb-0">Welcome back — sign in to continue</p>
+          </div>
+
+          <!-- Card -->
+          <div class="auth-card p-4 p-md-5">
+
+            <h2 class="display-font fw-bold text-white mb-1" style="font-size:1.5rem;">Sign in</h2>
+            <p class="text-secondary small mb-4">Enter your credentials to access your account.</p>
+
+            <form class="needs-validation" action="/users/signin" method="post" novalidate>
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="email" class="form-label text-secondary small fw-semibold text-uppercase mb-1" style="letter-spacing:0.07em;">
+                  Email
+                </label>
+                <div class="input-group input-group-dark">
+                  <span class="input-group-text border-end-0 rounded-start-3" style="background:var(--bg-elevated); border-color: var(--bs-border-color);">
+                    <i class="bi bi-envelope text-secondary"></i>
+                  </span>
                   <input
                     type="email"
-                    class="form-control"
+                    class="form-control form-control-dark border-start-0 rounded-end-3"
                     id="email"
-                    placeholder="Enter your email"
-                    required
                     name="email"
+                    placeholder="you@example.com"
+                    required
                   />
-                  <div class="valid-feedback">Looks good!</div>
+                  <div class="invalid-feedback">Please enter a valid email.</div>
                 </div>
+              </div>
 
-                <div class="mb-3">
-                  <label for="password" class="form-label fw-semibold"
-                    >Password</label
-                  >
+              <!-- Password -->
+              <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label for="password" class="form-label text-secondary small fw-semibold text-uppercase mb-0" style="letter-spacing:0.07em;">
+                    Password
+                  </label>
+                </div>
+                <div class="input-group input-group-dark">
+                  <span class="input-group-text border-end-0 rounded-start-3" style="background:var(--bg-elevated); border-color: var(--bs-border-color);">
+                    <i class="bi bi-lock text-secondary"></i>
+                  </span>
                   <input
                     type="password"
                     id="password"
-                    class="form-control"
-                    aria-describedby="passwordHelpBlock"
-                    required
                     name="password"
+                    class="form-control form-control-dark border-start-0 rounded-end-3"
+                    placeholder="••••••••"
+                    required
                   />
-                  <div id="passwordHelpBlock" class="form-text">
-                    Must be 8-20 characters long and include letters and
-                    numbers.
-                  </div>
+                  <div class="invalid-feedback">Password is required.</div>
                 </div>
+                <div class="form-text text-secondary opacity-75 mt-1">
+                  Must be 8–20 characters with letters and numbers.
+                </div>
+              </div>
 
-                <div class="d-grid">
-                  <button class="btn btn-primary btn-lg" type="submit">
-                    Sign in
-                  </button>
-                </div>
+              <!-- Submit -->
+              <div class="d-grid mb-3">
+                <button class="btn btn-accent btn-lg rounded-3 fw-bold" type="submit">
+                  <i class="bi bi-box-arrow-in-right me-2"></i>Sign in
+                </button>
+              </div>
 
-                <div class="text-center mt-3">
-                  <p class="small mb-0">
-                    Don't' have an account?
-                    <a href="/users/signup" class="text-decoration-none">Sign up</a>
-                  </p>
-                </div>
-              </form>
-            </div>
+              <!-- Divider -->
+              <div class="d-flex align-items-center gap-3 my-3">
+                <hr class="flex-grow-1 opacity-10" />
+                <span class="text-secondary small opacity-50">or</span>
+                <hr class="flex-grow-1 opacity-10" />
+              </div>
+
+              <!-- Footer -->
+              <p class="text-center text-secondary small mb-0">
+                Don't have an account?
+                <a href="/users/signup" class="fw-semibold text-decoration-none" style="color:var(--accent);">
+                  Create one <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+              </p>
+
+            </form>
           </div>
+          <!-- /Card -->
+
         </div>
       </div>
     </div>

@@ -1,59 +1,84 @@
-<nav
-  class="navbar navbar-expand-lg bg-body-tertiary bg-dark"
->
-  <div class="container-fluid">
-    <a class="navbar-brand" href="./">Blogify</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavDropdown"
-      aria-controls="navbarNavDropdown"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-expand-lg navbar-dark-custom sticky-top py-2">
+  <div class="container">
+
+    <!-- Brand -->
+    <a class="navbar-brand-custom text-decoration-none" href="/">
+      Blogify<span class="brand-dot">.</span>
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler border-0 shadow-none" type="button"
+      data-bs-toggle="collapse" data-bs-target="#mainNav"
+      aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"
+      style="color:#888899;">
+      <i class="bi bi-list fs-4"></i>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
+
+    <!-- Nav links -->
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
-        </li>
-        <% if (locals.user) { %>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/blog/add-new">Add blog</a>
-          </li>
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-          <%= user.username %>
+          <a class="nav-link text-secondary-emphasis fw-medium px-3 rounded-2" href="/">
+            <i class="bi bi-house me-1"></i>Home
           </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/users/signout">Signout</a></li>
-          </ul>
         </li>
-        <% } else{%>
+
+        <% if (locals.user) { %>
+
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/users/signin">Sign in</a>
+            <a class="nav-link text-secondary-emphasis fw-medium px-3 rounded-2" href="/blog/add-new">
+              <i class="bi bi-pencil-square me-1"></i>Write
+            </a>
           </li>
+
+          <!-- User dropdown -->
+          <li class="nav-item dropdown ms-lg-2">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 px-2 rounded-2"
+              href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+              style="color:#e8e8f0;">
+              <span class="avatar-ring">
+                <img src="<%= user.avatar %>" alt="<%= user.username %>">
+              </span>
+              <span class="fw-semibold small"><%= user.username %></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark-custom mt-2">
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" href="/users/signout">
+                  <i class="bi bi-box-arrow-right text-danger"></i>
+                  <span>Sign out</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+        <% } else { %>
+
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/users/signup">Create account</a>
+            <a class="nav-link text-secondary-emphasis fw-medium px-3 rounded-2" href="/users/signin">
+              Sign in
+            </a>
           </li>
-          <% }%>
+          <li class="nav-item ms-lg-1">
+            <a class="btn btn-accent btn-sm px-4 py-2 rounded-3 fw-semibold" href="/users/signup">
+              Get started
+            </a>
+          </li>
+
+        <% } %>
+
       </ul>
     </div>
+
   </div>
 </nav>
 
+<!-- Flash error -->
 <% if (locals.error) { %>
-  <div class="container mt-4">
-    <div class="alert alert-danger d-flex align-items-center " role="alert">
-        <%= locals.error %>
+  <div class="container mt-3">
+    <div class="alert-dark-danger d-flex align-items-center gap-2 px-4 py-3 rounded-3">
+      <i class="bi bi-exclamation-circle-fill flex-shrink-0"></i>
+      <span><%= locals.error %></span>
     </div>
   </div>
 <% } %>

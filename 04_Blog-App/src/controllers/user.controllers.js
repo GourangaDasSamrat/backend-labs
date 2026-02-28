@@ -18,7 +18,7 @@ export const signupUser = asyncHandler(async (req, res) => {
   });
 
   // redirect to homepage
-  return res.redirect("/signin");
+  return res.redirect("/users/signin");
 });
 
 export const signinUser = asyncHandler(async (req, res) => {
@@ -26,7 +26,13 @@ export const signinUser = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
   email = email?.trim().toLowerCase();
 
-  const user = await User.matchPassword(email, password);
+  try {
+    const token = await User.matchPasswordAndGenerateToken(email, password);
 
-  if (user) res.redirect('/')
+    if (token) return res.cookie("token", token).redirect("/");
+  } catch (err) {
+    return res.render("signin", {
+      error: "Invalid credentials",
+    });
+  }
 });

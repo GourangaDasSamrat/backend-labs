@@ -11,8 +11,23 @@
       class="container mt-3"
       action="/blog/add-new"
       method="post"
+      enctype="multipart/form-data"
       novalidate
     >
+
+    <div class="mb-3">
+      <label for="cover" class="form-label"
+        >Upload cover image ( only png or webp )</label
+      >
+      <input
+        class="form-control"
+        type="file"
+        id="cover"
+        name="coverImage"
+        accept=".webp, .png"
+      />
+    </div>
+
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -35,19 +50,6 @@
           required
           placeholder="Blog content"
         ></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label for="cover" class="form-label"
-          >Upload cover image ( only png or webp )</label
-        >
-        <input
-          class="form-control"
-          type="file"
-          id="cover"
-          name="coverImage"
-          accept=".webp, .png"
-        />
       </div>
 
       <button type="submit" class="btn btn-primary">Submit</button>

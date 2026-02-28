@@ -1,60 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   <head>
-    <%- include('./partials/head'); %>
-    <title>Add new blog | Blogify</title>
+    <%- include('./partials/head') %>
+    <%- include('./partials/styles') %>
+    <title>Write a post — Blogify</title>
   </head>
   <body>
-    <div><%- include('./partials/navbar')%></div>
 
-    <form
-      class="container mt-3"
-      action="/blog/add-new"
-      method="post"
-      enctype="multipart/form-data"
-      novalidate
-    >
+    <%- include('./partials/navbar') %>
 
-    <div class="mb-3">
-      <label for="cover" class="form-label"
-        >Upload cover image ( only png or webp )</label
-      >
-      <input
-        class="form-control"
-        type="file"
-        id="cover"
-        name="coverImage"
-        accept=".webp, .png"
-      />
-    </div>
+    <main class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-xl-7">
 
-      <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input
-          type="text"
-          class="form-control"
-          id="title"
-          name="title"
-          placeholder="Blog title"
-          required
-        />
+          <!-- Page header -->
+          <div class="mb-4 pb-4 border-bottom" style="border-color: var(--bs-border-color) !important;">
+            <span class="badge-accent mb-2 d-inline-block">New post</span>
+            <h1 class="display-font fw-bold text-white mb-1" style="font-size:2rem; letter-spacing:-0.03em;">
+              Write something great
+            </h1>
+            <p class="text-secondary mb-0 small">Share your ideas with the Blogify community.</p>
+          </div>
+
+          <!-- Form card -->
+          <div class="card-dark p-4 p-md-5">
+            <form action="/blog/add-new" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+              <!-- Cover image -->
+              <div class="mb-4">
+                <label class="form-label text-secondary small fw-semibold text-uppercase mb-1" style="letter-spacing:0.07em;">
+                  <i class="bi bi-image me-1"></i>Cover image
+                  <span class="ms-1 opacity-50">(optional)</span>
+                </label>
+                <input
+                  class="form-control form-control-dark"
+                  type="file"
+                  id="cover"
+                  name="coverImage"
+                  accept=".webp,.png"
+                />
+                <div class="form-text opacity-50">PNG or WebP only.</div>
+              </div>
+
+              <!-- Title -->
+              <div class="mb-4">
+                <label for="title" class="form-label text-secondary small fw-semibold text-uppercase mb-2" style="letter-spacing:0.08em;">
+                  <i class="bi bi-type me-1"></i>Title
+                </label>
+                <input
+                  type="text"
+                  class="form-control form-control-dark form-control-lg border-0"
+                  id="title"
+                  name="title"
+                  placeholder="Give your post a compelling title…"
+                  required
+                />
+                <div class="invalid-feedback">Please enter a title.</div>
+              </div>
+
+              <!-- Body -->
+              <div class="mb-4">
+                <label for="body" class="form-label text-secondary small fw-semibold text-uppercase mb-2" style="letter-spacing:0.08em;">
+                  <i class="bi bi-body-text me-1"></i>Content
+                </label>
+                <textarea
+                  class="form-control form-control-dark border-0"
+                  id="body"
+                  name="body"
+                  rows="12"
+                  required
+                  placeholder="Tell your story…"
+                ></textarea>
+                <div class="invalid-feedback">Content cannot be empty.</div>
+              </div>
+
+              <!-- Actions -->
+              <div class="d-flex align-items-center gap-3 pt-2 border-top" style="border-color: var(--bs-border-color) !important;">
+                <button type="submit" class="btn btn-accent px-5 py-2 rounded-3 fw-bold flex-shrink-0">
+                  <i class="bi bi-send me-2"></i>Publish post
+                </button>
+                <a href="/" class="btn btn-outline-secondary px-4 py-2 rounded-3 fw-semibold">
+                  Cancel
+                </a>
+              </div>
+
+            </form>
+          </div>
+          <!-- /Form card -->
+
+        </div>
       </div>
+    </main>
 
-      <div class="mb-3">
-        <label for="body" class="form-label">Content</label>
-        <textarea
-          class="form-control"
-          id="body"
-          name="body"
-          rows="8"
-          required
-          placeholder="Blog content"
-        ></textarea>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-    <%- include('./partials/scripts'); %>
+    <%- include('./partials/scripts') %>
   </body>
 </html>

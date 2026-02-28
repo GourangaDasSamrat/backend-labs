@@ -12,7 +12,7 @@ const blogSchema = new Schema(
       type: String,
       required: true,
       minlength: [30, "Blog content must be at least 30 characters"],
-      maxlength: [500, "Blog content can't exceed 500 characters"],
+      maxlength: [5000, "Blog content can't exceed 5000 characters"],
     },
     coverImage: {
       type: String,

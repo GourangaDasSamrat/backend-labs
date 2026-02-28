@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { uploadOnCloudinary as upload } from "../utils/cloudinary.js";
 
 // sign up user
 export const signupUser = asyncHandler(async (req, res) => {
@@ -9,12 +10,27 @@ export const signupUser = asyncHandler(async (req, res) => {
   email = email?.trim().toLowerCase();
   fullname = fullname?.trim();
 
+    // Validate required fields
+    if (!email || !username || !fullname || !password) {
+      throw new ApiError(400, "All fields are required");
+    }
+
+  // extract cover
+    const avatarLocalPath = req.file?.path;;
+
+    // upload cover
+    const avatar = avatarLocalPath
+      ? await upload(avatarLocalPath)
+      : null;
+
+
   // create document on db
   await User.create({
     fullname,
     username,
     email,
     password,
+    avatar: avatar?.url || "https://i.postimg.cc/W11pqHTb/avatar.png",
   });
 
   // redirect to homepage

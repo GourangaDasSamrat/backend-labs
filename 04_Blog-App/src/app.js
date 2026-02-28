@@ -53,9 +53,10 @@ app.get("/", (req, res) =>
 );
 
 // import routes
-import { userRouter } from "./routes/index.js";
+import { blogRoutes, userRouter } from "./routes/index.js";
 
 // declare routes
+app.use("/blog", blogRoutes);
 app.use("/users", userRouter);
 
 // export initialized express app

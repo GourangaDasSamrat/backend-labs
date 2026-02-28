@@ -1,7 +1,7 @@
 import { User } from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-// sign up controller
+// sign up user
 export const signupUser = asyncHandler(async (req, res) => {
   // extract data from request body
   let { email, username, fullname, password } = req.body;
@@ -21,6 +21,7 @@ export const signupUser = asyncHandler(async (req, res) => {
   return res.redirect("/users/signin");
 });
 
+// sign in user
 export const signinUser = asyncHandler(async (req, res) => {
   // extract data from request body
   let { email, password } = req.body;
@@ -36,3 +37,8 @@ export const signinUser = asyncHandler(async (req, res) => {
     });
   }
 });
+
+// sign out user
+export const signoutUser = asyncHandler((_, res) =>
+  res.clearCookie("token").redirect("/"),
+);

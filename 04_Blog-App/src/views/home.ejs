@@ -1,14 +1,127 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   <head>
-    <%- include('./partials/head'); %>
-    <title>Blogify | A simple and modern blogging platform</title>
+    <%- include('./partials/head') %>
+    <%- include('./partials/styles') %>
+    <title>Blogify — Modern Blogging Platform</title>
   </head>
   <body>
-    <div >
-        <%- include('./partials/navbar')%>
-    </div>
 
-    <%- include('./partials/scripts'); %>
+    <%- include('./partials/navbar') %>
+
+    <% if (locals.user) { %>
+
+      <!-- Hero greeting -->
+      <div class="hero-glow py-5 border-bottom" style="border-color: var(--bs-border-color) !important;">
+        <div class="container">
+          <p class="text-uppercase fw-bold small mb-2 opacity-50 letter-spacing-wide" style="letter-spacing:0.14em; color: var(--accent);">
+            <i class="bi bi-stars me-1"></i>Latest stories
+          </p>
+          <h1 class="display-font fw-bold mb-1" style="font-size: clamp(2rem,4vw,3rem); letter-spacing:-0.03em;">
+            Good to see you, <span style="color:var(--accent);"><%= user.username %></span>
+          </h1>
+          <p class="text-secondary mb-0">Discover what people are writing today.</p>
+        </div>
+      </div>
+
+      <!-- Blog grid -->
+      <main class="container py-5">
+
+        <% if (blogs && blogs.length > 0) { %>
+
+          <div class="row g-4">
+            <% blogs.forEach((blog, i) => { %>
+              <div class="col-12 col-md-6 col-lg-4">
+                <a href="/blog/<%= blog._id %>" class="text-decoration-none d-block h-100">
+                  <div class="card-dark h-100">
+
+                    <img
+                      src="<%= blog.coverImage %>"
+                      alt="<%= blog.title %>"
+                      class="blog-cover"
+                    />
+
+                    <div class="p-4">
+                      <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge-accent">Article</span>
+                        <span class="text-secondary small ms-auto">
+                          <i class="bi bi-clock me-1"></i>5 min read
+                        </span>
+                      </div>
+
+                      <h5 class="display-font fw-bold text-white mb-2 lh-sm" style="font-size:1.15rem;">
+                        <%= blog.title %>
+                      </h5>
+
+                      <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top" style="border-color: var(--bs-border-color) !important;">
+                        <div class="d-flex align-items-center gap-2">
+                          <span class="avatar-ring">
+                            <img src="<%= blog.createdBy?.profileImage || blog.coverImage %>" alt="author" />
+                          </span>
+                          <span class="text-secondary small fw-medium">
+                            <%= blog.createdBy?.username || 'Author' %>
+                          </span>
+                        </div>
+                        <span class="text-accent small fw-semibold" style="color:var(--accent);">
+                          Read <i class="bi bi-arrow-right ms-1"></i>
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>
+                </a>
+              </div>
+            <% }) %>
+          </div>
+
+        <% } else { %>
+
+          <!-- Empty state -->
+          <div class="text-center py-5 my-4">
+            <i class="bi bi-journals display-4 opacity-25 d-block mb-3"></i>
+            <h5 class="text-secondary fw-semibold">No posts yet</h5>
+            <p class="text-secondary small mb-4">Be the first one to share a story.</p>
+            <a href="/blog/add-new" class="btn btn-accent px-4 py-2 rounded-3 fw-semibold">
+              <i class="bi bi-pencil-square me-2"></i>Write first post
+            </a>
+          </div>
+
+        <% } %>
+
+      </main>
+
+    <% } else { %>
+
+      <!-- Unauthenticated CTA -->
+      <div class="container py-5 my-4">
+        <div class="cta-card p-5 text-center mx-auto" style="max-width:560px;">
+          <div class="display-font fw-bold mb-3" style="font-size:2.25rem; letter-spacing:-0.03em;">
+            Stories worth reading.
+          </div>
+          <p class="text-secondary mb-4 px-lg-3">
+            Join Blogify to access thousands of articles written by real people on topics you care about.
+          </p>
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="/users/signup" class="btn btn-accent px-4 py-2 rounded-3 fw-bold">
+              <i class="bi bi-person-plus me-2"></i>Create account
+            </a>
+            <a href="/users/signin" class="btn btn-outline-secondary px-4 py-2 rounded-3 fw-semibold">
+              Sign in
+            </a>
+          </div>
+        </div>
+      </div>
+
+    <% } %>
+
+    <!-- Footer -->
+    <footer class="border-top py-4 text-center text-secondary small" style="border-color: var(--bs-border-color) !important;">
+      <div class="container">
+        <span class="display-font fw-bold" style="color:#fff;">Blogify<span style="color:var(--accent);">.</span></span>
+        <span class="ms-3 opacity-50">© <%= new Date().getFullYear() %> — Built for writers.</span>
+      </div>
+    </footer>
+
+    <%- include('./partials/scripts') %>
   </body>
 </html>

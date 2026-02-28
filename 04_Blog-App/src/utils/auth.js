@@ -7,6 +7,7 @@ export const createTokenForUser = (user) => {
     _id: user._id,
     email: user.email,
     username: user.username,
+    fullname: user.fullname,
     avatar: user.avatar,
     role: user.role,
   };

@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
-// import {Comment}from'../models/comment.model.js'
+import {Comment}from'../models/comment.model.js'
 
 export const addNewComment = asyncHandler(async (req, res) => {
   // extract comment body and blog id
@@ -12,7 +12,7 @@ export const addNewComment = asyncHandler(async (req, res) => {
 
   // add comment on db
   await Comment.create({
-    content: body,
+    body,
     blogId,
     createdBy: req.user._id,
   });

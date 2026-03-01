@@ -1,0 +1,53 @@
+paths:
+  /comment/add-new/{blogId}:
+    post:
+      tags:
+        - Comments
+      summary: Add a comment to a blog post
+      description: >
+        Creates a new comment on the specified blog post.
+        Requires authentication. Redirects back to the blog page on success.
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: blogId
+          in: path
+          required: true
+          description: MongoDB ObjectId of the blog post to comment on.
+          schema:
+            type: string
+            example: "64abc456def789"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - body
+              properties:
+                body:
+                  type: string
+                  minLength: 10
+                  maxLength: 70
+                  example: "This is a really insightful post!"
+      responses:
+        '302':
+          description: Comment created. Redirects to /blog/{blogId}.
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /blog/64abc456def789
+        '400':
+          description: Validation error — comment body is empty or missing.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Comment body is required"
+        '401':
+          description: Unauthorized — user not logged in.

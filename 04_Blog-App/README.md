@@ -1,3 +1,8 @@
+## Blogify - Blog platform
+
+## Preview
+[Live link](https://backend-labs-lw2s.onrender.com)
+
 # Tech stacks
 
 - Express JS

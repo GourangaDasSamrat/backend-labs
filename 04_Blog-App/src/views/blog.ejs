@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <%- include('./partials/head') %>
+    <%- include('./partials/styles') %>
+    <title><%= blog.title %> — Blogify</title>
+  </head>
+  <body>
+
+    <%- include('./partials/navbar') %>
+
+    <!-- Hero cover -->
+    <div class="w-100 position-relative overflow-hidden" style="max-height:520px; background:#0d0d0f;">
+      <img
+        src="<%= blog.coverImage %>"
+        alt="<%= blog.title %>"
+        class="w-100 d-block"
+        style="height:520px; object-fit:cover; opacity:0.75;"
+      />
+      <!-- Gradient fade into body -->
+      <div class="position-absolute bottom-0 start-0 w-100" style="height:220px; background:linear-gradient(to bottom, transparent, #0d0d0f);"></div>
+    </div>
+
+    <!-- Article -->
+    <main class="container" style="margin-top:-80px; position:relative; z-index:2;">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-xl-7">
+
+          <!-- Category badge -->
+          <div class="mb-3">
+            <span class="badge-accent">Article</span>
+          </div>
+
+          <!-- Title -->
+          <h1 class="display-font fw-bold text-white lh-sm mb-4"
+            style="font-size:clamp(1.9rem, 4vw, 2.9rem); letter-spacing:-0.03em;">
+            <%= blog.title %>
+          </h1>
+
+          <!-- Author + meta bar -->
+          <div class="d-flex align-items-center gap-3 flex-wrap mb-5 pb-4 border-bottom"
+            style="border-color:var(--bs-border-color) !important;">
+
+            <!-- Avatar -->
+            <span class="avatar-ring">
+              <img
+                src="<%= blog.createdBy.avatar %>"
+                alt="<%= blog.createdBy.fullname %>"
+                style="width:40px; height:40px;"
+              />
+            </span>
+
+            <div class="flex-grow-1">
+              <p class="fw-semibold text-white mb-0 small"><%= blog.createdBy.fullname %></p>
+              <p class="text-secondary mb-0" style="font-size:0.78rem;">
+                <i class="bi bi-calendar3 me-1"></i>
+                <%= new Date(blog.createdAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) %>
+                <span class="mx-2 opacity-30">·</span>
+                <i class="bi bi-clock me-1"></i>5 min read
+              </p>
+            </div>
+
+            <!-- Share button -->
+            <button class="btn btn-outline-secondary btn-sm rounded-3 px-3 fw-semibold" onclick="navigator.clipboard.writeText(window.location.href); this.innerHTML='<i class=\'bi bi-check2\' ></i> Copied'">
+              <i class="bi bi-share me-1"></i>Share
+            </button>
+          </div>
+
+          <!-- Body content -->
+          <div class="blog-body text-white lh-lg mb-5" style="font-size:1.08rem;">
+            <%- blog.body.replace(/\n/g, '<br/>') %>
+          </div>
+
+          <!-- Bottom author card -->
+          <div class="card-dark p-4 d-flex align-items-center gap-4 mb-5 flex-wrap">
+            <span class="avatar-ring flex-shrink-0">
+              <img
+                src="<%= blog.createdBy.avatar %>"
+                alt="<%= blog.createdBy.fullname %>"
+                style="width:52px; height:52px;"
+              />
+            </span>
+            <div>
+              <p class="text-secondary small text-uppercase fw-bold mb-1" style="letter-spacing:0.08em;">Written by</p>
+              <p class="fw-bold text-white mb-1"><%= blog.createdBy.fullname %></p>
+              <p class="text-secondary small mb-0">Member of the Blogify community</p>
+            </div>
+            <a href="/" class="btn btn-outline-secondary btn-sm rounded-3 px-3 ms-auto fw-semibold">
+              <i class="bi bi-arrow-left me-1"></i>All posts
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-top py-4 text-center text-secondary small" style="border-color: var(--bs-border-color) !important;">
+      <div class="container">
+        <span class="display-font fw-bold" style="color:#fff;">Blogify<span style="color:var(--accent);">.</span></span>
+        <span class="ms-3 opacity-50">© <%= new Date().getFullYear() %> — Built for writers.</span>
+      </div>
+    </footer>
+
+    <%- include('./partials/scripts') %>
+  </body>
+</html>

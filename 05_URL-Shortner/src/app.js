@@ -26,5 +26,10 @@ app.use(
   }),
 );
 
+// import routes
+import urlRoute from './routes/url.routes.js';
+
+app.use('/url',urlRoute)
+
 // export initialized express app
 export default app;

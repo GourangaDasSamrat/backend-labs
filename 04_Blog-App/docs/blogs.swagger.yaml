@@ -1,0 +1,94 @@
+paths:
+  /blog/add-new:
+    get:
+      tags:
+        - Blogs
+      summary: Render add new blog page
+      description: Returns the add blog HTML form page. Requires authentication.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Add blog page rendered successfully.
+        '401':
+          description: Unauthorized — user not logged in.
+
+    post:
+      tags:
+        - Blogs
+      summary: Create a new blog post
+      description: >
+        Creates a new blog post authored by the authenticated user.
+        Optionally accepts a cover image upload via multipart form.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - body
+              properties:
+                title:
+                  type: string
+                  minLength: 15
+                  maxLength: 72
+                  example: "My Awesome Blog Title Here"
+                body:
+                  type: string
+                  minLength: 30
+                  maxLength: 5000
+                  example: "This is the detailed content of my blog post..."
+                coverImage:
+                  type: string
+                  format: binary
+                  description: Optional cover image (uploaded via multipart).
+      responses:
+        '302':
+          description: Blog created. Redirects to /blog/{id}.
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /blog/64abc456def789
+        '400':
+          description: Validation error — title or body missing.
+          content:
+            application/json:
+              schema:
+                $ref: '../swagger.yaml#/components/schemas/Error'
+        '401':
+          description: Unauthorized — user not logged in.
+
+  /blog/{id}:
+    get:
+      tags:
+        - Blogs
+      summary: Get a blog post by ID
+      description: >
+        Fetches a single blog post by its MongoDB ObjectId and renders
+        the blog page with associated comments.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: MongoDB ObjectId of the blog post.
+          schema:
+            type: string
+            example: "64abc456def789"
+      responses:
+        '200':
+          description: Blog page rendered with blog data and comments.
+          content:
+            text/html:
+              schema:
+                type: string
+        '404':
+          description: Blog not found.
+          content:
+            application/json:
+              schema:
+                $ref: '../swagger.yaml#/components/schemas/Error'

@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary as upload } from "../utils/cloudinary.js";
 
+// add new blog
 export const addNewBlog = asyncHandler(async (req, res) => {
   // extract blog title and and body from request body
   let { title, body } = req.body;
@@ -15,7 +16,7 @@ export const addNewBlog = asyncHandler(async (req, res) => {
   }
 
   // extract cover
-  const coverImageLocalPath = req.file?.path;;
+  const coverImageLocalPath = req.file?.path;
 
   // upload cover
   const coverImage = coverImageLocalPath
@@ -33,4 +34,14 @@ export const addNewBlog = asyncHandler(async (req, res) => {
 
   // redirect to home
   return res.redirect(`/blog/${blog._id}`);
+});
+
+// dynamic blog
+export const getBlogById = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id).populate("createdBy");
+
+  return res.render("blog", {
+    user: req.user,
+    blog,
+  });
 });

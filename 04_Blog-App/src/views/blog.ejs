@@ -90,6 +90,92 @@
             </a>
           </div>
 
+          <!-- ── Comments ── -->
+          <div class="mb-2 pb-3 border-bottom" style="border-color:var(--bs-border-color) !important;">
+            <h5 class="display-font fw-bold text-white mb-0">
+              <i class="bi bi-chat-dots me-2" style="color:var(--accent);"></i>Comments
+              <% if (comments && comments.length > 0) { %>
+                <span class="badge rounded-pill ms-2 fw-semibold small" style="background:var(--accent-muted); color:var(--accent); font-size:0.75rem;">
+                  <%= comments.length %>
+                </span>
+              <% } %>
+            </h5>
+          </div>
+
+          <!-- Comment list -->
+          <% if (comments && comments.length > 0) { %>
+            <div class="d-flex flex-column gap-3 my-4">
+              <% comments.forEach(comment => { %>
+                <div class="card-dark p-4">
+                  <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="avatar-ring flex-shrink-0">
+                      <img
+                        src="<%= comment.createdBy?.avatar%>"
+                        alt="<%= comment.createdBy?.fullname || 'User' %>"
+                        style="width:34px; height:34px;"
+                      />
+                    </span>
+                    <div>
+                      <p class="fw-semibold text-white mb-0 small"><%= comment.createdBy?.fullname || 'Anonymous' %></p>
+                      <p class="text-secondary mb-0" style="font-size:0.75rem;">
+                        <i class="bi bi-clock me-1"></i>
+                        <%= new Date(comment.createdAt).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) %>
+                      </p>
+                    </div>
+                  </div>
+                  <p class="text-white mb-0 lh-lg" style="font-size:0.95rem;"><%= comment.body %></p>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="text-center py-4 my-2">
+              <i class="bi bi-chat-square-text d-block mb-2 opacity-25" style="font-size:2rem;"></i>
+              <p class="text-secondary small mb-0">No comments yet. Be the first to share your thoughts.</p>
+            </div>
+          <% } %>
+
+          <!-- Add comment form -->
+          <div class="card-dark p-4 mt-4 mb-5">
+            <h6 class="fw-bold text-white mb-1 small text-uppercase" style="letter-spacing:0.08em;">
+              <i class="bi bi-pencil me-2" style="color:var(--accent);"></i>Leave a comment
+            </h6>
+            <p class="text-secondary mb-3" style="font-size:0.8rem;">
+              <% if (locals.user) { %>
+                Commenting as <span class="fw-semibold text-white"><%= user.username %></span>
+              <% } else { %>
+                <a href="/users/signin" class="fw-semibold text-decoration-none" style="color:var(--accent);">Sign in</a> to leave a comment.
+              <% } %>
+            </p>
+
+            <form action="/comment/add-new/<%= blog._id %>" method="post" class="needs-validation" novalidate>
+
+              <div class="mb-3">
+                <textarea
+                  class="form-control form-control-dark"
+                  name="body"
+                  id="commentBody"
+                  rows="4"
+                  placeholder="Share your thoughts…"
+                  required
+                  <%= locals.user ? '' : 'disabled' %>
+                  style="resize:vertical;"
+                ></textarea>
+                <div class="invalid-feedback">Please write something before submitting.</div>
+              </div>
+
+              <div class="d-flex justify-content-end">
+                <button
+                  type="submit"
+                  class="btn btn-accent px-4 py-2 rounded-3 fw-bold"
+                  <%= locals.user ? '' : 'disabled' %>
+                >
+                  <i class="bi bi-send me-2"></i>Post comment
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- ── /Comments ── -->
+
         </div>
       </div>
     </main>

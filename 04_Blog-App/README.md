@@ -15,3 +15,4 @@
 - Cloudinary
 - Cors
 - JWT
+- Swagger

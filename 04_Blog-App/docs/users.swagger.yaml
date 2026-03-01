@@ -1,0 +1,128 @@
+paths:
+  /users/signup:
+    get:
+      tags:
+        - Users
+      summary: Render signup page
+      description: Returns the signup HTML page.
+      responses:
+        '200':
+          description: Signup page rendered successfully.
+
+    post:
+      tags:
+        - Users
+      summary: Register a new user
+      description: Creates a new user account. Optionally accepts an avatar image upload.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - fullname
+                - username
+                - email
+                - password
+              properties:
+                fullname:
+                  type: string
+                  example: "John Doe"
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 20
+                  example: "johndoe"
+                email:
+                  type: string
+                  format: email
+                  example: "john@example.com"
+                password:
+                  type: string
+                  minLength: 6
+                  format: password
+                  example: "secret123"
+                avatar:
+                  type: string
+                  format: binary
+                  description: Optional profile picture (uploaded via multipart).
+      responses:
+        '302':
+          description: User created. Redirects to /users/signin.
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /users/signin
+        '400':
+          description: Validation error — missing or invalid fields.
+          content:
+            application/json:
+              schema:
+                $ref: '../swagger.yaml#/components/schemas/Error'
+
+  /users/signin:
+    get:
+      tags:
+        - Users
+      summary: Render signin page
+      description: Returns the signin HTML page.
+      responses:
+        '200':
+          description: Signin page rendered successfully.
+
+    post:
+      tags:
+        - Users
+      summary: Sign in an existing user
+      description: Authenticates the user and sets a JWT token in a cookie.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "john@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "secret123"
+      responses:
+        '302':
+          description: Login successful. Redirects to home (/). Sets `token` cookie.
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /
+            Set-Cookie:
+              schema:
+                type: string
+                example: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; Path=/; HttpOnly
+        '200':
+          description: Invalid credentials — re-renders signin page with error message.
+
+  /users/signout:
+    get:
+      tags:
+        - Users
+      summary: Sign out the current user
+      description: Clears the authentication cookie and redirects to home.
+      security:
+        - cookieAuth: []
+      responses:
+        '302':
+          description: Signed out successfully. Redirects to /.
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /

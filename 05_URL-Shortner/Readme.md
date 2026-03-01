@@ -2,5 +2,5 @@
 
 - Express JS
 - Mongoose
-- Typescript
 - dotenv
+- cors

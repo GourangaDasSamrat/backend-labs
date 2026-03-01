@@ -2,23 +2,16 @@
   "name": "url-shortner",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
   },
   "author": "Gouranga Das Samrat",
   "license": "ISC",
   "packageManager": "pnpm@10.30.3",
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.3.3",
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
-  },
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "mongoose": "^9.2.3"

@@ -56,11 +56,12 @@ app.get("/", async (req, res) => {
 });
 
 // import routes
-import { blogRoutes, userRouter } from "./routes/index.js";
+import { blogRoutes, userRouter,commentRouter } from "./routes/index.js";
 
 // declare routes
 app.use("/blog", blogRoutes);
 app.use("/users", userRouter);
+app.use("/comment", commentRouter);
 
 // export initialized express app
 export default app;

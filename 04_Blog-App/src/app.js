@@ -4,6 +4,8 @@ import cors from "cors";
 import express from "express";
 import path from "path";
 import { verifyAuth } from "./middlewares/auth.middleware.js";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 // initialize express app
 const app = express();
@@ -13,6 +15,39 @@ export const port = process.env.PORT || 3000;
 
 // constant for limit
 const limit = "16kb";
+
+// Swagger Configuration
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Blogify — Modern Blogging Platform",
+      version: "1.0.0",
+      description: "Blogify api documentation",
+    },
+    servers: [{ url: `http://localhost:${port}` }],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+  },
+  // docs file
+  apis: ["./docs/*.yaml"],
+};
+
+const uiOptions = {
+  customSiteTitle: "Blogify | Api Docs",
+  customfavIcon: "https://i.postimg.cc/P55fvRT8/favicon.png",
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+//serve docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, uiOptions))
 
 // configure cors for cross origin connection
 app.use(

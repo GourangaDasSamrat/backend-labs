@@ -1,7 +1,8 @@
-import { Blog } from '../models/blog.model.js'
+import { Blog } from "../models/blog.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary as upload } from "../utils/cloudinary.js";
+import { Comment } from "../models/comment.model.js";
 
 // add new blog
 export const addNewBlog = asyncHandler(async (req, res) => {
@@ -39,9 +40,12 @@ export const addNewBlog = asyncHandler(async (req, res) => {
 // dynamic blog
 export const getBlogById = asyncHandler(async (req, res) => {
   const blog = await Blog.findById(req.params.id).populate("createdBy");
-
+  const comments = await Comment.find({ blogId: req.params.id }).populate(
+    "createdBy",
+  );
   return res.render("blog", {
     user: req.user,
     blog,
+    comments,
   });
 });

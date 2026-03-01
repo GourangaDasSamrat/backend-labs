@@ -48,7 +48,7 @@ app.set("views", path.resolve("./src/views"));
 
 // serve page
 app.get("/", async (req, res) => {
-  const allBlogs = await Blog.find({});
+  const allBlogs = await Blog.find({}).populate("createdBy");
   res.render("home", {
     user: req.user,
     blogs: allBlogs,

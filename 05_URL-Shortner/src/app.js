@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
-
+import { Url } from "./models/url.model.js"
+import path from "path"
 
 // initialize express app
 const app = express();
@@ -25,6 +26,21 @@ app.use(
     limit,
   }),
 );
+
+// configure ejs
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./src/views"));
+
+// serve page
+app.get("/", async (req, res) => {
+  const allUrls = await Url.find({});
+  const totalClicks = allUrls.reduce(
+    (sum, u) => sum + (u.visitHistory?.length || 0),
+    0,
+  );
+  res.render("home", { allUrls, totalClicks, host: req.headers.host });
+});
+
 
 // import routes
 import urlRoute from './routes/url.routes.js';

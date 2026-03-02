@@ -39,3 +39,18 @@ export const redirectToOriginalUrl = asyncHandler(async (req, res) => {
 
   return res.redirect(entry.redirectURL);
 });
+
+export const getAnalytics = asyncHandler(async (req, res) => {
+  const shortId = req.params.shortId;
+
+  const result = await Url.findOne({ shortId });
+
+  if (!result) {
+    return res.status(404).json({ message: "Short URL not found" });
+  }
+
+  return res.json({
+    totalClicks: result.visitHistory.length,
+    analytics: result.visitHistory,
+  });
+});

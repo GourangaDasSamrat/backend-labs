@@ -2,5 +2,7 @@
 
 - Express JS
 - Mongoose
+- EJS
 - dotenv
 - cors
+- Nanoid

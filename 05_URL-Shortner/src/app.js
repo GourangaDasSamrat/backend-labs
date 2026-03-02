@@ -1,7 +1,8 @@
 import cors from "cors";
 import express from "express";
-import { Url } from "./models/url.model.js"
-import path from "path"
+import path from "path";
+import { Url } from "./models/url.model.js";
+import urlRoute from "./routes/url.routes.js";
 
 // initialize express app
 const app = express();
@@ -12,40 +13,51 @@ export const port = process.env.PORT || 3000;
 // constant for limit
 const limit = "16kb";
 
-// configure cors for cross origin connection
+// configure cors
 app.use(
   cors({
-    origin: process.env.CORS_ALLOWED_ORIGINS, // frontend app's url
-    credentials: true, // allow credentials
+    origin: process.env.CORS_ALLOWED_ORIGINS,
+    credentials: true,
   }),
 );
 
-// configure rate limiter for json
-app.use(
-  express.json({
-    limit,
-  }),
-);
+// parse json
+app.use(express.json({ limit }));
 
 // configure ejs
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./src/views"));
 
-// serve page
+// ─── Page Routes (must be BEFORE urlRoute) ────────────────────────────────────
+
 app.get("/", async (req, res) => {
   const allUrls = await Url.find({});
   const totalClicks = allUrls.reduce(
     (sum, u) => sum + (u.visitHistory?.length || 0),
-    0,
+    0
   );
   res.render("home", { allUrls, totalClicks, host: req.headers.host });
 });
 
+app.get("/analytics", async (req, res) => {
+  const allUrls = await Url.find({});
+  res.render("analytics", { allUrls, shortId: null, urlData: null });
+});
 
-// import routes
-import urlRoute from './routes/url.routes.js';
+app.get("/analytics/:shortId", async (req, res) => {
+  const allUrls = await Url.find({});
+  const urlData = await Url.findOne({ shortId: req.params.shortId });
+  if (!urlData) return res.status(404).send("Short URL not found");
+  res.render("analytics", {
+    allUrls,
+    shortId: req.params.shortId,
+    urlData,
+  });
+});
 
-app.use('/',urlRoute)
+// ─── API + Redirect Routes ────────────────────────────────────────────────────
+
+app.use("/", urlRoute);
 
 // export initialized express app
 export default app;

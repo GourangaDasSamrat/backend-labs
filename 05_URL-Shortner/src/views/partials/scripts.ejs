@@ -1,0 +1,122 @@
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+  crossorigin="anonymous"></script>
+
+<script>
+  // Copy to clipboard
+  function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="bi bi-check2"></i> Copied!';
+      setTimeout(() => btn.innerHTML = orig, 2000);
+    });
+  }
+
+  // Shorten URL form handler
+  const shortenForm = document.getElementById('shortenForm');
+  if (shortenForm) {
+    shortenForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('longUrl');
+      const btn = document.getElementById('shortenBtn');
+      const resultBox = document.getElementById('resultBox');
+      const errorBox = document.getElementById('errorBox');
+      const url = input.value.trim();
+
+      if (!url) return;
+
+      // Reset state
+      resultBox.classList.add('d-none');
+      errorBox.classList.add('d-none');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-sm"></span> Shortening…';
+
+      try {
+        const res = await fetch('/url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ redirectURL: url })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.shortId) {
+          const shortUrl = `${window.location.origin}/${data.shortId}`;
+
+          // Show result box
+          document.getElementById('shortLink').textContent = shortUrl;
+          document.getElementById('shortLink').href = shortUrl;
+          document.getElementById('copyBtn').onclick = function () {
+            copyToClipboard(shortUrl, this);
+          };
+          resultBox.classList.remove('d-none');
+
+          // Update link counter in stats strip
+          const linkCounter = document.getElementById('linkCount');
+          if (linkCounter) linkCounter.textContent = parseInt(linkCounter.textContent) + 1;
+
+          // Add new row to table without reloading
+          const emptyState = document.querySelector('.empty-state');
+          const today = new Date().toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+          });
+
+          // If empty state is showing, replace it with a real table
+          if (emptyState) {
+            emptyState.closest('.table-card').innerHTML = `
+              <div class="table-responsive">
+                <table class="table table-borderless align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>#</th><th>Short Link</th><th>Original URL</th>
+                      <th>Clicks</th><th>Created</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>`;
+          }
+
+          const activeTbody = document.querySelector('.table-card tbody');
+          if (activeTbody) {
+            const rowCount = activeTbody.querySelectorAll('tr').length + 1;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td style="color:var(--muted); font-size:0.8rem;">${rowCount}</td>
+              <td>
+                <a href="/${data.shortId}" target="_blank" class="short-link">
+                  <i class="bi bi-box-arrow-up-right me-1" style="font-size:0.75rem;"></i>${data.shortId}
+                </a>
+              </td>
+              <td><span class="original-url" title="${url}">${url}</span></td>
+              <td><span class="clicks-badge"><i class="bi bi-cursor me-1"></i>0</span></td>
+              <td style="color:var(--muted); font-size:0.82rem;">${today}</td>
+              <td>
+                <button class="action-btn me-1" title="Copy"
+                  onclick="copyToClipboard('${shortUrl}', this)">
+                  <i class="bi bi-clipboard"></i>
+                </button>
+                <a href="/analytics/${data.shortId}" class="action-btn" title="Analytics"
+                  style="text-decoration:none; display:inline-block;">
+                  <i class="bi bi-bar-chart"></i>
+                </a>
+              </td>`;
+            activeTbody.prepend(tr);
+          }
+
+          input.value = '';
+
+        } else {
+          document.getElementById('errorMsg').textContent = data.message || 'Something went wrong.';
+          errorBox.classList.remove('d-none');
+        }
+      } catch (err) {
+        document.getElementById('errorMsg').textContent = 'Network error. Please try again.';
+        errorBox.classList.remove('d-none');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-scissors"></i> Shorten';
+      }
+    });
+  }
+</script>

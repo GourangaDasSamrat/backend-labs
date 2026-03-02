@@ -29,7 +29,7 @@ app.use(
 // import routes
 import urlRoute from './routes/url.routes.js';
 
-app.use('/url',urlRoute)
+app.use('/',urlRoute)
 
 // export initialized express app
 export default app;

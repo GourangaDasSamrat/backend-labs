@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <%- include('./partials/styles') %>
+  <title>Urly | Modern URL Shortener</title>
+</head>
+<body>
+  <%- include('./partials/navbar') %>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow-2"></div>
+    <div class="container">
+      <div class="row align-items-center g-5">
+
+        <!-- Left -->
+        <div class="col-lg-6">
+          <div class="hero-badge fade-up">
+            <i class="bi bi-lightning-fill"></i> Fast & Free URL Shortener
+          </div>
+          <h1 class="hero-title fade-up fade-up-1">
+            Make your links<br><span class="highlight">shorter & smarter</span>
+          </h1>
+          <p class="hero-sub fade-up fade-up-2">
+            Shorten long URLs instantly, track every click, and share with confidence. No sign-up required.
+          </p>
+          <div class="d-flex gap-3 flex-wrap fade-up fade-up-3">
+            <div class="d-flex align-items-center gap-2" style="color:var(--muted); font-size:0.85rem;">
+              <i class="bi bi-shield-check text-success"></i> Secure redirects
+            </div>
+            <div class="d-flex align-items-center gap-2" style="color:var(--muted); font-size:0.85rem;">
+              <i class="bi bi-clock text-warning"></i> Instant shortening
+            </div>
+            <div class="d-flex align-items-center gap-2" style="color:var(--muted); font-size:0.85rem;">
+              <i class="bi bi-bar-chart text-info"></i> Click analytics
+            </div>
+          </div>
+        </div>
+
+        <!-- Right - URL Card -->
+        <div class="col-lg-6 fade-up fade-up-4">
+          <div class="url-card">
+            <p class="mb-1" style="font-size:0.78rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted);">Shorten a URL</p>
+            <h4 class="mb-4" style="font-family:'DM Sans',sans-serif; font-weight:700; font-size:1.1rem;">Paste your long link below</h4>
+
+            <form id="shortenForm" novalidate>
+              <div class="input-group-custom">
+                <i class="bi bi-link-45deg" style="color:var(--muted); font-size:1.2rem; padding: 0.3rem 0 0.3rem 0.5rem; align-self:center;"></i>
+                <input
+                  type="url"
+                  id="longUrl"
+                  class="url-input"
+                  placeholder="https://your-very-long-url.com/with/lots/of/parameters"
+                  required
+                />
+                <button type="submit" id="shortenBtn" class="btn-shorten">
+                  <i class="bi bi-scissors"></i> Shorten
+                </button>
+              </div>
+            </form>
+
+            <!-- Result -->
+            <div id="resultBox" class="result-box d-none">
+              <div>
+                <div style="font-size:0.75rem; color:var(--muted); margin-bottom:0.2rem;">Your short link is ready:</div>
+                <a id="shortLink" href="#" target="_blank" class="result-url"></a>
+              </div>
+              <button id="copyBtn" class="btn-copy">
+                <i class="bi bi-clipboard"></i> Copy
+              </button>
+            </div>
+
+            <!-- Error -->
+            <div id="errorBox" class="error-box d-none">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <span id="errorMsg"></span>
+            </div>
+
+            <!-- Stats strip -->
+            <div class="stats-strip">
+              <div class="stat-item">
+                <i class="bi bi-link"></i>
+                <span><span id="linkCount"><%= typeof allUrls !== 'undefined' ? allUrls.length : 0 %></span> links created</span>
+              </div>
+              <div class="stat-item">
+                <i class="bi bi-cursor-fill"></i>
+                <span><%= typeof totalClicks !== 'undefined' ? totalClicks : 0 %> total clicks</span>
+              </div>
+              <div class="stat-item">
+                <i class="bi bi-people-fill"></i>
+                <span>Free forever</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- URL History -->
+  <section class="history-section">
+    <div class="container">
+      <div class="section-label">Your links</div>
+      <div class="d-flex align-items-end justify-content-between flex-wrap gap-2 mb-4">
+        <div>
+          <h2 class="section-title mb-1">Recently Shortened</h2>
+          <p class="section-sub mb-0">All your shortened URLs at a glance</p>
+        </div>
+        <a href="/analytics" class="btn btn-sm" style="background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:0.82rem;">
+          <i class="bi bi-bar-chart me-1"></i> Full Analytics
+        </a>
+      </div>
+
+      <div class="table-card">
+        <% if (typeof allUrls !== 'undefined' && allUrls.length > 0) { %>
+        <div class="table-responsive">
+          <table class="table table-borderless align-middle mb-0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Short Link</th>
+                <th>Original URL</th>
+                <th>Clicks</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% allUrls.forEach((url, i) => { %>
+              <tr>
+                <td style="color:var(--muted); font-size:0.8rem;"><%= i + 1 %></td>
+                <td>
+                  <a href="/<%= url.shortId %>" target="_blank" class="short-link">
+                    <i class="bi bi-box-arrow-up-right me-1" style="font-size:0.75rem;"></i>
+                    <%= url.shortId %>
+                  </a>
+                </td>
+                <td>
+                  <span class="original-url" title="<%= url.redirectURL %>"><%= url.redirectURL %></span>
+                </td>
+                <td>
+                  <span class="clicks-badge">
+                    <i class="bi bi-cursor me-1"></i><%= url.visitHistory ? url.visitHistory.length : 0 %>
+                  </span>
+                </td>
+                <td style="color:var(--muted); font-size:0.82rem;">
+                  <%= url.createdAt ? new Date(url.createdAt).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '—' %>
+                </td>
+                <td>
+                  <button class="action-btn me-1" title="Copy"
+                    onclick="copyToClipboard('<%= host %>/<%= url.shortId %>', this)">
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                  <a href="/analytics/<%= url.shortId %>" class="action-btn" title="Analytics" style="text-decoration:none; display:inline-block;">
+                    <i class="bi bi-bar-chart"></i>
+                  </a>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <% } else { %>
+        <div class="empty-state">
+          <i class="bi bi-link-45deg"></i>
+          <p class="fw-600 mb-1" style="color:var(--text); font-weight:600;">No links yet</p>
+          <p class="mb-0">Shorten your first URL above to get started.</p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-label">Why Urly?</div>
+        <h2 class="section-title">Everything you need</h2>
+        <p class="section-sub mx-auto" style="max-width:440px;">Simple, powerful, and completely free. Built for developers and marketers.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+            <h5>Instant Shortening</h5>
+            <p>Shorten any URL in milliseconds. No account needed. Just paste and go.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <h5>Click Analytics</h5>
+            <p>Track clicks with timestamps. Understand when and how often your links are visited.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
+            <h5>Secure Redirects</h5>
+            <p>All redirects are handled server-side securely. No sketchy third-party services.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('./partials/footer') %>
+  <%- include('./partials/scripts') %>
+</body>
+</html>

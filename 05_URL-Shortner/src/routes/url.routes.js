@@ -1,19 +1,19 @@
 import { Router } from "express";
 import {
   generateShortUrl,
-  getAnalytics,
   redirectToOriginalUrl,
+  getAnalytics,
 } from "../controllers/url.controllers.js";
 
 const router = Router();
 
-// generate short url
-router.post("/", generateShortUrl);
+// POST /url → shorten a URL
+router.post("/url", generateShortUrl);
 
-// redirect to original url
+// GET /:shortId → redirect to original URL
 router.get("/:shortId", redirectToOriginalUrl);
 
-// get analytics
-router.get("/analytics/:shortId", getAnalytics);
+// GET /url/:shortId/analytics → JSON analytics
+router.get("/url/:shortId/analytics", getAnalytics);
 
 export default router;

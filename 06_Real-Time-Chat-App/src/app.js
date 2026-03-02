@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import http from "http";
+import path from "path";
 
 // initialize express app
 const app = express();
@@ -26,7 +27,10 @@ app.use(
 app.use(express.json({ limit }));
 
 // serve static public folder
-app.use(express.static("/public"));
+app.use(express.static(path.resolve("./public")));
+
+// get route for public folder
+app.get("/", (_, res) => res.sendFile("/public/index.html"));
 
 // export initialized http server
 export default server;

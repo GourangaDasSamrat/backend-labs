@@ -2,16 +2,23 @@
   "name": "prisma-mongodb",
   "version": "1.0.0",
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "tsx watch src/index.ts",
+    "build": "prisma@6 generate && tsc",
+    "start": "node dist/index.js",
+    "type-check": "tsc --noEmit"
   },
   "author": "Gouranga Das Samrat",
   "license": "ISC",
-  "packageManager": "pnpm@10.30.3",
   "devDependencies": {
-    "prisma": "6"
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.3",
+    "prisma": "6",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@prisma/client": "6",

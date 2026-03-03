@@ -1,7 +1,7 @@
 ## Chatify - A modern real time chatting app
 
 ## Preview
-[Live link]()
+[Live link](https://backend-labs-6.onrender.com)
 
 
 ## Tech Stack

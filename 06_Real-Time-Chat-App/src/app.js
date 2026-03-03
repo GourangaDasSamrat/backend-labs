@@ -2,12 +2,16 @@ import cors from "cors";
 import express from "express";
 import http from "http";
 import path from "path";
+import { Server } from "socket.io";
 
 // initialize express app
 const app = express();
 
-// create server
+// initialize http server
 const server = http.createServer(app);
+
+// initialize io
+const io = new Server(server);
 
 // configure port
 export const port = process.env.PORT || 3000;
@@ -33,4 +37,4 @@ app.use(express.static(path.resolve("./public")));
 app.get("/", (_, res) => res.sendFile("/public/index.html"));
 
 // export initialized http server
-export default server;
+export { io, server };

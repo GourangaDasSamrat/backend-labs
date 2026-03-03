@@ -1,5 +1,12 @@
 import "dotenv/config";
-import server, { port } from "./app.js";
+import { io, port, server } from "./app.js";
+
+// socket connection
+io.on("connection", (socket) => {
+  socket.on("userChat", (message) => {
+    io.emit("newChat", message);
+  });
+});
 
 // run server
 server.listen(port, () =>

@@ -2,8 +2,13 @@
 
 ## Tech stacks
 
+- Express JS
 - Prisma
 - Prisma Client
+- Json Web Token
+- Cookie Parser
+- Bcrypt JS
+- Cors
 - Dotenv
 
 ## Setup

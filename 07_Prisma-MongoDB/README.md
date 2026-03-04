@@ -33,11 +33,12 @@ Copy the provided example file and fill in your values:
 cp .env.example .env
 ```
 
-| Variable       | Description                        |
-| -------------- | ---------------------------------- |
-| `PORT`         | Port the server runs on            |
-| `DATABASE_URL` | Your MongoDB connection string     |
-| `JWT_SECRET`   | Secret key used to sign JWT tokens |
+| Variable               | Description                           |
+| ---------------------- | ------------------------------------- |
+| `PORT`                 | Port the server runs on(default:4000) |
+| `DATABASE_URL`         | Your MongoDB connection string        |
+| `JWT_SECRET`           | Secret key used to sign JWT tokens    |
+| `JWT_TOKEN_EXPIRES_IN` | Cookie expiry time(default:1d)        |
 
 ### 3. Push schema to MongoDB
 

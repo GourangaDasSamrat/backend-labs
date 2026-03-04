@@ -1,9 +1,9 @@
 import { Router } from "express";
-import {handleUserSignUp} from '../controllers/user.controllers'
+import { handleUserSignUp } from "../controllers/user.controllers";
 
-const router= Router()
+const router = Router();
 
 // sign up
-router.route('/signup').post(handleUserSignUp)
+router.route("/signup").post(handleUserSignUp);
 
-export default router
+export default router;

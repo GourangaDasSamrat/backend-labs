@@ -1,4 +1,4 @@
-import { Prisma, Post as PrismaPost, User as PrismaUser } from "@db";
+import { Prisma, Post as PrismaPost, User as PrismaUser } from "@db/client";
 
 // Basic Types
 export type User = PrismaUser;

@@ -6,7 +6,8 @@
     "strict": true,
     "esModuleInterop": true,
     "paths": {
-      "@db": ["./generated/prisma/client"],
+      "@db": ["./src/lib/prisma"],
+      "@db/client": ["./generated/prisma/client"],
       "@db/models": ["./generated/prisma/models"],
       "@/types/*": ["./src/types/*"]
     }

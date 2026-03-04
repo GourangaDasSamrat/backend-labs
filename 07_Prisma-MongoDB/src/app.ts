@@ -36,5 +36,11 @@ app.use(
 // setup cookie
 app.use(cookieParser());
 
+// import routes
+import userRouter from "./routes/user.routes";
+
+// create endpoints
+app.use("/api/v1/user", userRouter);
+
 // export initialized express app
 export default app;

@@ -74,3 +74,17 @@ export const handleUserSignIn = asyncHandler(
     }
   },
 );
+
+// user sign out
+export const handleUserSignOut = asyncHandler(
+  async (_, res: Response) => {
+    try {
+      res.clearCookie("token").status(200).json({ success: true });
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new ApiError(500, err.message, [err]);
+      }
+      throw new ApiError(500, "Something went wrong", [err]);
+    }
+  },
+);

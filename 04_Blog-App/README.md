@@ -16,3 +16,12 @@
 - Cors
 - JWT
 - Swagger
+
+### Docs
+
+1. Api docs served using swagger on
+```md
+http://localhost:3000/api-docs
+
+<!-- or where your app is running -->
+```

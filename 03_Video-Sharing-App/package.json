@@ -1,7 +1,7 @@
 {
   "name": "stream-vault",
   "author": "Gouranga Das Samrat",
-  "license": "ISC",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "repository": {

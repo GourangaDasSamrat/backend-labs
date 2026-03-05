@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "author": "Gouranga Das Samrat",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",

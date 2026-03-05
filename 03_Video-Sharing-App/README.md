@@ -44,3 +44,13 @@ pnpm build
 # Start the server
 pnpm start:server
 ```
+
+
+### Docs
+
+1. Api docs served using swagger on
+```md
+http://localhost:3000/api-docs
+
+<!-- or where your app is running -->
+```

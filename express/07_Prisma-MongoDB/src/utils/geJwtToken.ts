@@ -1,5 +1,5 @@
+import { ApiError } from '@/utils/apiError';
 import jwt from "jsonwebtoken";
-import { ApiError } from './apiError';
 
 const secret = process.env.JWT_SECRET;
 const expiry = process.env.JWT_TOKEN_EXPIRES_IN;

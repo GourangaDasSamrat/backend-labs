@@ -3,7 +3,7 @@ import {
   handleUserSignIn,
   handleUserSignOut,
   handleUserSignUp,
-} from "../controllers/user.controllers";
+} from "@/controllers/user.controllers";
 
 const router = Router();
 

@@ -5,12 +5,13 @@
     "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,
+    "baseUrl": ".",
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "paths": {
-      "@db": ["./src/lib/prisma"],
-      "@db/client": ["./generated/prisma/client"],
-      "@db/models": ["./generated/prisma/models"],
-      "@/types/*": ["./src/types/*"]
+      "@db": ["src/lib/prisma"],
+      "@db/client": ["generated/prisma/client"],
+      "@db/models": ["generated/prisma/models"],
+      "@/*": ["src/*"]
     }
   },
   "include": ["src/**/*"]

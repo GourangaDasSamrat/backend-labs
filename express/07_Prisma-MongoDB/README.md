@@ -8,7 +8,6 @@
 - Prisma Client
 - Json Web Token
 - Cookie Parser
-- Bcrypt JS
 - Cors
 - Dotenv
 

@@ -1,0 +1,15 @@
+{
+  "name": "chatify",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "bun src/index.ts",
+    "dev": "bun --hot src/index.ts"
+  },
+  "author": "Gouranga Das Samrat",
+  "license": "MIT",
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

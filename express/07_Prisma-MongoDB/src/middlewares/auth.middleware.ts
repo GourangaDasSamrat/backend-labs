@@ -1,7 +1,7 @@
+import { ApiError } from "@/utils/apiError";
 import prisma from "@db";
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { ApiError } from "../utils/apiError";
 
 const secret = process.env.JWT_SECRET;
 

@@ -1,8 +1,8 @@
 import { User } from "@/types/prisma";
+import { ApiError } from "@/utils/apiError";
+import { cookieToken } from "@/utils/cookieToken";
 import prisma from "@db";
 import { Request, Response } from "express";
-import { ApiError } from "../utils/apiError";
-import { cookieToken } from "../utils/cookieToken";
 
 // user sign up
 export const handleUserSignUp = async (req: Request, res: Response) => {

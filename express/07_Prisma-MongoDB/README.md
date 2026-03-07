@@ -10,6 +10,7 @@
 - Cookie Parser
 - Cors
 - Dotenv
+- Tsup
 
 ## Installation & Setup
 
@@ -21,7 +22,7 @@
 ### 1. Install dependencies
 
 ```zsh
-npm i
+npm install
 ```
 
 ### 2. Configure environment variables
@@ -32,47 +33,48 @@ Copy the provided example file and fill in your values:
 cp .env.example .env
 ```
 
-| Variable               | Description                           |
-| ---------------------- | ------------------------------------- |
-| `PORT`                 | Port the server runs on(default:4000) |
-| `DATABASE_URL`         | Your MongoDB connection string        |
-| `JWT_SECRET`           | Secret key used to sign JWT tokens    |
-| `JWT_TOKEN_EXPIRES_IN` | Cookie expiry time(default:1d)        |
+| Variable               | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `PORT`                 | Port the server runs on (default: `4000`) |
+| `DATABASE_URL`         | Your MongoDB connection string            |
+| `JWT_SECRET`           | Secret key used to sign JWT tokens        |
+| `JWT_TOKEN_EXPIRES_IN` | Cookie expiry time (default: `1d`)        |
 
-### 3. Push schema to MongoDB
-
-```zsh
-npx prisma@6 db push
-```
-
-### 4. Generate Prisma Client
+### 3. Generate Prisma Client
 
 ```zsh
-npx prisma@6 generate
+npm run db:gen
 ```
 
-### 5. Start the dev server
+### 4. Push schema to MongoDB
+
+Sync your Prisma schema with your MongoDB database:
+
+```zsh
+npm run db:push
+```
+
+### 5. Development & Production
+
+Run Development Server:
 
 ```zsh
 npm run dev
 ```
 
-> For production, build first with `npm run build`, then `npm start`.
-
-1. Install dependencies:
+Production Build:
 
 ```zsh
-npm i
+npm run build
+npm start
 ```
 
-2. Push your schema to MongoDB
+## Scripts Overview
 
-```zsh
-npx prisma@6 db push
-```
-
-3. Generate prisma client
-
-```zsh
-npx prisma@6 generate
-```
+| Script    | Description                                     |
+| --------- | ----------------------------------------------- |
+| `db:gen`  | Manually generate Prisma Client (v6)            |
+| `db:push` | Pushes Prisma schema to MongoDB                 |
+| `dev`     | Syncs DB, watches files and restarts on changes |
+| `build`   | Compiles TS to JS using tsup with minification  |
+| `start`   | Runs the compiled production build from `dist/` |

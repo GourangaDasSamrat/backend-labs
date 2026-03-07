@@ -1,6 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import {errorHandler} from '@/middlewares/error.middleware'
 
 // initialize express app
 const app = express();
@@ -32,6 +33,9 @@ app.use(
     extended: true,
   }),
 );
+
+// use error handler middleware
+app.use(errorHandler);
 
 // setup cookie
 app.use(cookieParser());

@@ -72,3 +72,25 @@ export const handleUpdatePost = async (req: Request, res: Response) => {
     throw new ApiError(500, "Something went wrong", [err]);
   }
 };
+
+// delete post
+export const handleDeletePost = async (req: Request, res: Response) => {
+  try {
+    // extract post id
+    const { id } = req.params;
+
+    // validate id
+    if (!id || Array.isArray(id)) {
+      throw new ApiError(400, "Post does not exist");
+    }
+
+    const deletePost = prisma.post.delete({ where: { id } });
+
+    res.status(200).json({ success: true, deletePost});
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new ApiError(500, err.message, [err]);
+    }
+    throw new ApiError(500, "Something went wrong", [err]);
+  }
+};

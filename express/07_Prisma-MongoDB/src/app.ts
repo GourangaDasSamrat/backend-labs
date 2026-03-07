@@ -1,7 +1,8 @@
+import { errorHandler } from "@/middlewares/error.middleware";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import {errorHandler} from '@/middlewares/error.middleware'
+import userRouter from "@/routes/user.routes";
 
 // initialize express app
 const app = express();
@@ -9,42 +10,39 @@ const app = express();
 // configure port
 export const port = process.env.PORT || 3000;
 
-// constant for limit
+// request size limit
 const limit = "16kb";
 
-// configure cors for cross origin connection
+// CORS configuration
 app.use(
   cors({
-    origin: process.env.CORS_ALLOWED_ORIGINS, // frontend app's url
-    credentials: true, // allow credentials
-  }),
+    origin: process.env.CORS_ALLOWED_ORIGINS || "*",
+    credentials: true,
+  })
 );
 
-// configure rate limiter for json
+// JSON parser
 app.use(
   express.json({
     limit,
-  }),
+  })
 );
 
-// config url encoder
+// URL encoded parser
 app.use(
   express.urlencoded({
     extended: true,
-  }),
+    limit,
+  })
 );
 
-// use error handler middleware
-app.use(errorHandler);
-
-// setup cookie
+// cookie parser
 app.use(cookieParser());
 
-// import routes
-import userRouter from "./routes/user.routes";
-
-// create endpoints
+// routes
 app.use("/api/v1/user", userRouter);
 
-// export initialized express app
+// error handler (must be last)
+app.use(errorHandler);
+
 export default app;

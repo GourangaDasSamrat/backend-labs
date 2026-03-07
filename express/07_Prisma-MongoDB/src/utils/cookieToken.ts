@@ -1,5 +1,5 @@
 import { User } from "@/types/prisma";
-import { getJwtToken } from "@/utils/geJwtToken";
+import { getJwtToken } from "@/utils/getJwtToken";
 import { Response } from "express";
 
 export const cookieToken = (user: User, res: Response) => {

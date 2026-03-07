@@ -26,7 +26,45 @@ export const handleCreatePost = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(200).json(createPost);
+    res.status(200).json({ success: true, createPost });
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new ApiError(500, err.message, [err]);
+    }
+    throw new ApiError(500, "Something went wrong", [err]);
+  }
+};
+
+// update post
+export const handleUpdatePost = async (req: Request, res: Response) => {
+  try {
+    // extract post id
+    const { id } = req.params;
+
+    // validate id
+    if (!id || Array.isArray(id)) {
+      throw new ApiError(400, "Post does not exist");
+    }
+
+    // extract data from request body
+    let { title, content } = req.body;
+    title = title?.trim();
+    content = content?.trim();
+
+    if (!title || !content) {
+      throw new ApiError(400, "All fields required");
+    }
+
+    // update post
+    const updatedPost = await prisma.post.update({
+      where: { id },
+      data: {
+        title,
+        content,
+      },
+    });
+
+    res.status(200).json({ success: true, updatedPost });
   } catch (err) {
     if (err instanceof Error) {
       throw new ApiError(500, err.message, [err]);

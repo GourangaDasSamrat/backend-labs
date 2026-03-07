@@ -1,5 +1,5 @@
-import app, { port } from "@/app";
 import "dotenv/config";
+import app, { port } from "@/app";
 
 // run app
 app.listen(port, () => {

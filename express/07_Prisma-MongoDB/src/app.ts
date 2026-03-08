@@ -1,4 +1,5 @@
 import { errorHandler } from "@/middlewares/error.middleware";
+import postRouter from '@/routes/post.routes';
 import userRouter from "@/routes/user.routes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -36,11 +37,12 @@ app.use(
   })
 );
 
-// cookie parser
+// Cookie parser
 app.use(cookieParser());
 
 // routes
 app.use("/api/v1/user", userRouter);
+app.use('/api/v1/post',postRouter)
 
 // error handler (must be last)
 app.use(errorHandler);

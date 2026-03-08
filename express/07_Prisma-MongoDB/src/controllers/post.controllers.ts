@@ -69,3 +69,9 @@ export const handleDeletePost = async (req: Request, res: Response) => {
 
   res.status(200).json({ success: true, deletePost });
 };
+
+// get all posts
+export const handleGetAllPosts = async (_:Request, res: Response) => {
+  const allPosts = await prisma.post.findMany();
+  res.json({ success: true, allPosts:allPosts });
+};

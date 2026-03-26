@@ -1,0 +1,29 @@
+# Run the application
+run:
+    go run main.go
+
+# Format all files in the project
+fmt:
+    go fmt ./...
+
+# Lint the project
+lint:
+    golangci-lint run
+
+# Clean up dependencies and format
+tidy:
+    go mod tidy
+    just fmt
+
+# Do everything: tidy, format, and run
+dev: tidy run
+
+binary_name := if os() == "windows" { "app.exe" } else { "app" }
+
+# Build the project
+build:
+    go build -o {{binary_name}}
+
+# Start the binary
+start:
+    {{ if os() == "windows" { binary_name } else { "./" + binary_name } }}

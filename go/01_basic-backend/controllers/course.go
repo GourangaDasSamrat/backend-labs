@@ -3,20 +3,39 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/gourangadassamrat/backend-labs/go/01_basic-backend/models"
 	"github.com/gourangadassamrat/backend-labs/go/01_basic-backend/utils"
 )
 
-var Courses []models.Course
+// Initialize with an empty slice to avoid 'null' in JSON responses.
+var Courses = []models.Course{}
 
 func HandleServeHome(w http.ResponseWriter, r *http.Request) {
-	utils.WriteResponse(w, []byte("<h1>This is the API of our course.</h1>"))
+	utils.WriteHTML(w, "<h1>This is the API of our course.</h1>")
 }
 
 func HandleGetAllCourses(w http.ResponseWriter, r *http.Request) {
-	// Ensure we return an empty slice [] instead of null if DB is empty
-	if Courses == nil {
-		Courses = []models.Course{}
+	// No need for a nil check if initialized as an empty slice above.
+	utils.JSONResponse(w, http.StatusOK, Courses)
+}
+
+func HandleGetCourse(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := params["id"]
+
+	if id == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Course ID is required")
+		return
 	}
-	utils.JSONResponse(w, Courses, http.StatusOK)
+
+	for _, course := range Courses {
+		if course.CourseId == id {
+			utils.JSONResponse(w, http.StatusOK, course)
+			return
+		}
+	}
+
+	// Return a structured JSON error instead of an empty body.
+	utils.JSONError(w, http.StatusNotFound, "Course not found with given ID")
 }

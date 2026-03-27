@@ -20,6 +20,8 @@ Thumbs.db
 
 # --- Build Specific ---
 # Binaries and executables
+tmp/
+*tmp/
 app
 app.exe
 *.exe
@@ -27,4 +29,3 @@ app.exe
 *.dll
 *.so
 *.dylib
-

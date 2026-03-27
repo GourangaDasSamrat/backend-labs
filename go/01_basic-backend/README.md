@@ -46,6 +46,7 @@ You can use the standard Go command or the provided **justfile**:
 | Action                   | Command                          |
 | :----------------------- | :------------------------------- |
 | **Run Server**           | `just run` (or `go run main.go`) |
+| **Run Dev Server**       | `just dev` (or `air`)            |
 | **Format Code & Tidy**   | `just fmt`                       |
 | **Lint Code**            | `just lint`                      |
 | **Build**                | `just build`                     |
@@ -74,4 +75,4 @@ You can use the standard Go command or the provided **justfile**:
 - **Language:** Go (Golang)
 - **Router:** [Gorilla Mux](https://github.com/gorilla/mux)
 - **Env Management:** [godotenv](https://github.com/joho/godotenv)
-- **Tooling:** GolangCI-Lint, Just
+- **Tooling:** GolangCI-Lint, Just, Air

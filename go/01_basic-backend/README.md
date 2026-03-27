@@ -31,7 +31,7 @@ cd backend-labs/go/01_basic-backend
 cp .env.example .env
 ```
 
-> **Note:** Open the `.env` file and replace the placeholder values with your actual configurations (e.g., DB credentials, API keys, etc.).
+> **Note:** Open the `.env` file and replace the placeholder values with your actual configurations.
 
 - Install dependencies
 
@@ -43,14 +43,14 @@ go mod tidy
 
 You can use the standard Go command or the provided **justfile**:
 
-| Action           | Command                          |
-| :--------------- | :------------------------------- |
-| **Run Server**   | `just run` (or `go run main.go`) |
-| **Format Code**  | `just fmt`                       |
-| **Lint Code**    | `just lint`                      |
-| **Tidy & Run**   | `just dev`                       |
-| **Build binary** | `just build`                     |
-| **Start binary** | `just start`                     |
+| Action                   | Command                          |
+| :----------------------- | :------------------------------- |
+| **Run Server**           | `just run` (or `go run main.go`) |
+| **Format Code & Tidy**   | `just fmt`                       |
+| **Lint Code**            | `just lint`                      |
+| **Build**                | `just build`                     |
+| **Buuld & Start binary** | `just start`                     |
+| **Clean**                | `just clean`                     |
 
 > **Note:** The server defaults to port `8080`. If occupied, it will automatically scan up to 100 subsequent ports to find an open slot. Also jst dynamically detect os and give actual binary name for `start` command.
 

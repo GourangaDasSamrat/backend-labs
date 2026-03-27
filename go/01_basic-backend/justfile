@@ -1,29 +1,36 @@
-# Run the application
+# Variables
+app    := "app"
+bin    := if os_family() == "windows" { app + ".exe" } else { "./" + app }
+linter := (if os_family() == "windows" { env_var("USERPROFILE") } else { env_var("HOME") }) + "/go/bin/golangci-lint"
+
+# Default: List all recipes
+default:
+    @just --list
+
+# Run directly
 run:
     go run main.go
 
-# Format all files in the project
+# Format and tidy dependencies
 fmt:
     go fmt ./...
-
-# Lint the project
-lint:
-    golangci-lint run
-
-# Clean up dependencies and format
-tidy:
     go mod tidy
-    just fmt
 
-# Do everything: tidy, format, and run
-dev: tidy run
+# Lint using golangci-lint
+lint:
+    @echo "Linting project..."
+    "{{linter}}" run ./...
 
-binary_name := if os() == "windows" { "app.exe" } else { "app" }
-
-# Build the project
+# Build for the current machine
 build:
-    go build -o {{binary_name}}
+    @echo "Building for {{os()}} {{arch()}}..."
+    go build -o {{if os_family() == "windows" { app + ".exe" } else { app }}} main.go
 
-# Start the binary
-start:
-    {{ if os() == "windows" { binary_name } else { "./" + binary_name } }}
+# Build and start the binary
+start: build
+    {{bin}}
+
+# Clean build artifacts
+clean:
+    go clean
+    rm -f {{app}} {{app}}.exe

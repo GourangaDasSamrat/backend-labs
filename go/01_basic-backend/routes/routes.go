@@ -6,10 +6,15 @@ import (
 )
 
 func Router() *mux.Router {
-	r := mux.NewRouter()
+	r := mux.NewRouter().StrictSlash(true)
 
+	// Base Routes
 	r.HandleFunc("/", controllers.HandleServeHome).Methods("GET")
-	r.HandleFunc("/courses", controllers.HandleGetAllCourses).Methods("GET")
+
+	api := r.PathPrefix("/api/v1").Subrouter()
+
+	// Call function from course_routes.go
+	RegisterCourseRoutes(api)
 
 	return r
 }

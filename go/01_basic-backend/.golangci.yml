@@ -1,6 +1,6 @@
 linters:
   enable:
-    - errcheck    # Checks for unchecked errors
-    - gosimple    # Suggests code simplifications
+    - errcheck # Checks for unchecked errors
+    - gosimple # Suggests code simplifications
     - staticcheck # Advanced static analysis
-    - unused      # Finds unused constants, variables, functions
+    - unused # Finds unused constants, variables, functions

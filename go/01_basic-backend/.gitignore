@@ -17,3 +17,14 @@ vendor/
 # --- OS Specific ---
 .DS_Store
 Thumbs.db
+
+# --- Build Specific ---
+# Binaries and executables
+app
+app.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+

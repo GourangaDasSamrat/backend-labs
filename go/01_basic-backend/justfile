@@ -1,7 +1,6 @@
 # Variables
-app    := "app"
-bin    := if os_family() == "windows" { app + ".exe" } else { "./" + app }
-linter := (if os_family() == "windows" { env_var("USERPROFILE") } else { env_var("HOME") }) + "/go/bin/golangci-lint"
+app := "app"
+bin := if os_family() == "windows" { app + ".exe" } else { "./" + app }
 
 # Default: List all recipes
 default:
@@ -11,6 +10,10 @@ default:
 run:
     go run main.go
 
+# Hot reload using air
+dev:
+    air
+
 # Format and tidy dependencies
 fmt:
     go fmt ./...
@@ -19,7 +22,7 @@ fmt:
 # Lint using golangci-lint
 lint:
     @echo "Linting project..."
-    "{{linter}}" run ./...
+    golangci-lint run ./...
 
 # Build for the current machine
 build:

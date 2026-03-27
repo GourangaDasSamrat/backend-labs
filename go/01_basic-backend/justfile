@@ -37,3 +37,8 @@ start: build
 clean:
     go clean
     rm -f {{app}} {{app}}.exe
+    @if [ "{{os_family()}}" = "windows" ]; then \
+        rmdir /S /Q tmp; \
+    else \
+        rm -rf tmp; \
+    fi

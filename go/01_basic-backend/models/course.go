@@ -10,5 +10,5 @@ type Course struct {
 
 // IsEmpty checks if the CourseId and CourseName are empty.
 func (c *Course) IsEmpty() bool {
-	return c.CourseId == "" && c.CourseName == ""
+	return c.CourseName == ""
 }

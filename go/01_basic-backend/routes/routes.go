@@ -13,8 +13,9 @@ func Router() *mux.Router {
 
 	api := r.PathPrefix("/api/v1").Subrouter()
 
-	// Call function from course_routes.go
+	// Call registration functions for different resources
 	RegisterCourseRoutes(api)
+	RegisterAuthorRoutes(api)
 
 	return r
 }

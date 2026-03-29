@@ -10,6 +10,9 @@ import (
 )
 
 func main() {
+	//  Initialize MongoDB Connection
+	utils.ConnectDB()
+
 	// Initialize Router
 	r := routes.Router()
 

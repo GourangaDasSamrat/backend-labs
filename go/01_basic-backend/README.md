@@ -74,5 +74,6 @@ You can use the standard Go command or the provided **justfile**:
 
 - **Language:** Go (Golang)
 - **Router:** [Gorilla Mux](https://github.com/gorilla/mux)
+- **Database:** Mongodb (using mongo-driver)
 - **Env Management:** [godotenv](https://github.com/joho/godotenv)
 - **Tooling:** GolangCI-Lint, Just, Air

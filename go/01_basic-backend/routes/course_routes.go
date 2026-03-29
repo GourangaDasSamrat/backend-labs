@@ -26,4 +26,8 @@ func RegisterCourseRoutes(r *mux.Router) {
 	// 5. Define PUT route to update an existing course by ID
 	// Matches: PUT /courses/{id}
 	courseRouter.HandleFunc("/{id}", controllers.HandleUpdateCourse).Methods("PUT")
+
+	// 6. Define DELETE route to remove a course
+	// Matches: DELETE /api/v1/courses/{id}
+	courseRouter.HandleFunc("/{id}", controllers.HandleDeleteCourse).Methods("DELETE")
 }

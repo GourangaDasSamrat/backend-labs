@@ -118,3 +118,25 @@ func HandleUpdateCourse(w http.ResponseWriter, r *http.Request) {
 	// 7. If the loop finishes, the ID was not found
 	utils.JSONError(w, http.StatusNotFound, "No course found with the provided ID")
 }
+
+// HandleDeleteCourse removes a single course from the slice based on the ID.
+func HandleDeleteCourse(w http.ResponseWriter, r *http.Request) {
+	// 1. Grab the ID from the URL parameters
+	params := mux.Vars(r)
+	id := params["id"]
+
+	// 2. Loop through the slice to find the index of the course
+	for index, course := range Courses {
+		if course.CourseId == id {
+			// 3. Remove the course by joining the elements before and after the index
+			Courses = append(Courses[:index], Courses[index+1:]...)
+
+			// 4. Return a success message
+			utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Course deleted successfully"})
+			return
+		}
+	}
+
+	// 5. If the loop ends, the ID doesn't exist
+	utils.JSONError(w, http.StatusNotFound, "Course not found")
+}

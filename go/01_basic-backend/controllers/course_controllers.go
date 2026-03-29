@@ -82,3 +82,39 @@ func HandleCreateCourse(w http.ResponseWriter, r *http.Request) {
 	// 6. Return the created object with a 201 Created status
 	utils.JSONResponse(w, http.StatusCreated, course)
 }
+
+// HandleUpdateCourse updates an existing course by its ID using the request body.
+func HandleUpdateCourse(w http.ResponseWriter, r *http.Request) {
+	// 1. Grab the ID from the URL parameters
+	params := mux.Vars(r)
+	id := params["id"]
+
+	// 2. Loop through the slice to find and remove the existing course
+	for index, course := range Courses {
+		if course.CourseId == id {
+			// Remove the old course from the slice
+			Courses = append(Courses[:index], Courses[index+1:]...)
+
+			// 3. Decode the new data from the request body
+			var updatedCourse models.Course
+			err := json.NewDecoder(r.Body).Decode(&updatedCourse)
+			if err != nil {
+				utils.JSONError(w, http.StatusBadRequest, "Invalid JSON format")
+				return
+			}
+
+			// 4. Ensure the ID remains the same as the URL parameter
+			updatedCourse.CourseId = id
+
+			// 5. Save the updated course back into the slice
+			Courses = append(Courses, updatedCourse)
+
+			// 6. Return the updated course as a response
+			utils.JSONResponse(w, http.StatusOK, updatedCourse)
+			return
+		}
+	}
+
+	// 7. If the loop finishes, the ID was not found
+	utils.JSONError(w, http.StatusNotFound, "No course found with the provided ID")
+}

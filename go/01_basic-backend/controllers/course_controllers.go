@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"encoding/json"
 	"math/rand"
 	"net/http"
@@ -10,133 +11,151 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gourangadassamrat/backend-labs/go/01_basic-backend/models"
 	"github.com/gourangadassamrat/backend-labs/go/01_basic-backend/utils"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// Courses is the in-memory database.
-// Initialized with an empty slice to ensure JSON returns [] instead of null.
-var Courses = []models.Course{}
+// Helper to get the collection handle
+func getCollection() *mongo.Collection {
+	return utils.GetCollection(utils.DB, "courses")
+}
 
-// HandleServeHome handles the root route and returns a simple HTML welcome message.
+// HandleServeHome handles the root route
 func HandleServeHome(w http.ResponseWriter, r *http.Request) {
-	utils.WriteHTML(w, "<h1>This is the API of our course.</h1>")
+	utils.WriteHTML(w, "<h1>This is the MongoDB-powered Course API.</h1>")
 }
 
-// HandleGetAllCourses returns the entire list of courses currently in memory.
+// HandleGetAllCourses fetches all documents from the collection
 func HandleGetAllCourses(w http.ResponseWriter, r *http.Request) {
-	utils.JSONResponse(w, http.StatusOK, Courses)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var courses []models.Course
+	cursor, err := getCollection().Find(ctx, bson.M{})
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Error fetching from database")
+		return
+	}
+	defer cursor.Close(ctx)
+
+	if err = cursor.All(ctx, &courses); err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Error decoding database results")
+		return
+	}
+
+	// Logic to ensure an empty slice is returned instead of null
+	if courses == nil {
+		courses = []models.Course{}
+	}
+
+	utils.JSONResponse(w, http.StatusOK, courses)
 }
 
-// HandleGetCourse fetches a single course by its unique ID from the URL parameters.
+// HandleGetCourse fetches one course using the custom course_id
 func HandleGetCourse(w http.ResponseWriter, r *http.Request) {
-	// 1. Grab parameters from the request URL
 	params := mux.Vars(r)
 	id := params["id"]
 
-	// 2. Validate that an ID was actually provided
-	if id == "" {
-		utils.JSONError(w, http.StatusBadRequest, "Course ID is required")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var course models.Course
+	// We search by the "course_id" field defined in our BSON tags
+	err := getCollection().FindOne(ctx, bson.M{"course_id": id}).Decode(&course)
+	if err != nil {
+		utils.JSONError(w, http.StatusNotFound, "Course not found")
 		return
 	}
 
-	// 3. Loop through the slice to find the matching ID
-	for _, course := range Courses {
-		if course.CourseId == id {
-			utils.JSONResponse(w, http.StatusOK, course)
-			return
-		}
-	}
-
-	// 4. If the loop finishes without returning, the course doesn't exist
-	utils.JSONError(w, http.StatusNotFound, "Course not found with given ID")
+	utils.JSONResponse(w, http.StatusOK, course)
 }
 
-// HandleCreateCourse decodes the request body, assigns a random ID, and saves the new course.
+// HandleCreateCourse generates a random ID and saves to MongoDB
 func HandleCreateCourse(w http.ResponseWriter, r *http.Request) {
-	// 1. Verify the request body is not nil
 	if r.Body == nil {
-		utils.JSONError(w, http.StatusBadRequest, "Please send some data")
+		utils.JSONError(w, http.StatusBadRequest, "Request body is empty")
 		return
 	}
 
-	// 2. Decode the JSON body into the Course struct
 	var course models.Course
-	err := json.NewDecoder(r.Body).Decode(&course)
-	if err != nil {
-		utils.JSONError(w, http.StatusBadRequest, "Invalid JSON format")
+	if err := json.NewDecoder(r.Body).Decode(&course); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid JSON")
 		return
 	}
 
-	// 3. Validate the data using the model's custom validation method
 	if course.IsEmpty() {
 		utils.JSONError(w, http.StatusBadRequest, "Course name is required")
 		return
 	}
 
-	// 4. Seed the random generator and create a unique ID
+	// Generating the custom ID like before
 	rand.Seed(time.Now().UnixNano())
 	course.CourseId = strconv.Itoa(rand.Intn(10000))
 
-	// 5. Append the new course to our global data store
-	Courses = append(Courses, course)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-	// 6. Return the created object with a 201 Created status
+	// Insert into Mongo. Mongo will automatically create the _id (ObjectID)
+	result, err := getCollection().InsertOne(ctx, course)
+	if err != nil {
+		utils.JSONError(w, http.StatusInternalServerError, "Failed to insert course")
+		return
+	}
+
+	// Optional: Assign the newly created Mongo ID back to the object for the response
+	if oid, ok := result.InsertedID.(interface{}); ok {
+		_ = oid // You can log this if needed
+	}
+
 	utils.JSONResponse(w, http.StatusCreated, course)
 }
 
-// HandleUpdateCourse updates an existing course by its ID using the request body.
+// HandleUpdateCourse performs an $set update in MongoDB
 func HandleUpdateCourse(w http.ResponseWriter, r *http.Request) {
-	// 1. Grab the ID from the URL parameters
 	params := mux.Vars(r)
 	id := params["id"]
 
-	// 2. Loop through the slice to find and remove the existing course
-	for index, course := range Courses {
-		if course.CourseId == id {
-			// Remove the old course from the slice
-			Courses = append(Courses[:index], Courses[index+1:]...)
-
-			// 3. Decode the new data from the request body
-			var updatedCourse models.Course
-			err := json.NewDecoder(r.Body).Decode(&updatedCourse)
-			if err != nil {
-				utils.JSONError(w, http.StatusBadRequest, "Invalid JSON format")
-				return
-			}
-
-			// 4. Ensure the ID remains the same as the URL parameter
-			updatedCourse.CourseId = id
-
-			// 5. Save the updated course back into the slice
-			Courses = append(Courses, updatedCourse)
-
-			// 6. Return the updated course as a response
-			utils.JSONResponse(w, http.StatusOK, updatedCourse)
-			return
-		}
+	var updateData models.Course
+	if err := json.NewDecoder(r.Body).Decode(&updateData); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid JSON")
+		return
 	}
 
-	// 7. If the loop finishes, the ID was not found
-	utils.JSONError(w, http.StatusNotFound, "No course found with the provided ID")
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Construct the update document
+	update := bson.M{
+		"$set": bson.M{
+			"course_name": updateData.CourseName,
+			"price":       updateData.CoursePrice,
+			"author":      updateData.Author,
+		},
+	}
+
+	result, err := getCollection().UpdateOne(ctx, bson.M{"course_id": id}, update)
+	if err != nil || result.MatchedCount == 0 {
+		utils.JSONError(w, http.StatusNotFound, "Course not found or update failed")
+		return
+	}
+
+	updateData.CourseId = id
+	utils.JSONResponse(w, http.StatusOK, updateData)
 }
 
-// HandleDeleteCourse removes a single course from the slice based on the ID.
+// HandleDeleteCourse removes a document based on the custom course_id
 func HandleDeleteCourse(w http.ResponseWriter, r *http.Request) {
-	// 1. Grab the ID from the URL parameters
 	params := mux.Vars(r)
 	id := params["id"]
 
-	// 2. Loop through the slice to find the index of the course
-	for index, course := range Courses {
-		if course.CourseId == id {
-			// 3. Remove the course by joining the elements before and after the index
-			Courses = append(Courses[:index], Courses[index+1:]...)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-			// 4. Return a success message
-			utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Course deleted successfully"})
-			return
-		}
+	result, err := getCollection().DeleteOne(ctx, bson.M{"course_id": id})
+	if err != nil || result.DeletedCount == 0 {
+		utils.JSONError(w, http.StatusNotFound, "Course not found")
+		return
 	}
 
-	// 5. If the loop ends, the ID doesn't exist
-	utils.JSONError(w, http.StatusNotFound, "Course not found")
+	utils.JSONResponse(w, http.StatusOK, map[string]string{"message": "Success! Course removed."})
 }

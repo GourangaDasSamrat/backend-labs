@@ -22,4 +22,8 @@ func RegisterCourseRoutes(r *mux.Router) {
 	// 4. Define POST route to create a new course
 	// Matches: POST /courses
 	courseRouter.HandleFunc("", controllers.HandleCreateCourse).Methods("POST")
+
+	// 5. Define PUT route to update an existing course by ID
+	// Matches: PUT /courses/{id}
+	courseRouter.HandleFunc("/{id}", controllers.HandleUpdateCourse).Methods("PUT")
 }

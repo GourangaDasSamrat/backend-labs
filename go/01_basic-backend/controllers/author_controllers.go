@@ -63,10 +63,24 @@ func HandleGetAuthor(w http.ResponseWriter, r *http.Request) {
 // HandleUpdateAuthor updates author details (like name or website)
 func HandleUpdateAuthor(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	objID, _ := primitive.ObjectIDFromHex(params["id"])
+	objID, err := primitive.ObjectIDFromHex(params["id"])
+	if err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid ID format")
+		return
+	}
 
 	var author models.Author
-	json.NewDecoder(r.Body).Decode(&author)
+	// FIX: Check the error return value of Decode
+	if err := json.NewDecoder(r.Body).Decode(&author); err != nil {
+		utils.JSONError(w, http.StatusBadRequest, "Invalid JSON format")
+		return
+	}
+
+	// Basic validation after decode
+	if author.Fullname == "" {
+		utils.JSONError(w, http.StatusBadRequest, "Fullname is required for update")
+		return
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

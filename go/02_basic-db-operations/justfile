@@ -1,0 +1,44 @@
+# Variables
+app := "app"
+bin := if os_family() == "windows" { app + ".exe" } else { "./" + app }
+
+# Default: List all recipes
+default:
+    @just --list
+
+# Run directly
+run:
+    go run main.go
+
+# Hot reload using air
+dev:
+    air
+
+# Format and tidy dependencies
+fmt:
+    go fmt ./...
+    go mod tidy
+
+# Lint using golangci-lint
+lint:
+    @echo "Linting project..."
+    golangci-lint run ./...
+
+# Build for the current machine
+build:
+    @echo "Building for {{os()}} {{arch()}}..."
+    go build -o {{if os_family() == "windows" { app + ".exe" } else { app }}} main.go
+
+# Build and start the binary
+start: build
+    {{bin}}
+
+# Clean build artifacts
+clean:
+    go clean
+    rm -f {{app}} {{app}}.exe
+    @if [ "{{os_family()}}" = "windows" ]; then \
+        rmdir /S /Q tmp; \
+    else \
+        rm -rf tmp; \
+    fi

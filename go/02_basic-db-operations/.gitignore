@@ -1,0 +1,31 @@
+# --- Environment Files ---
+# Ignore the real secrets, but keep the template
+.env
+.env.*
+!.env.example
+
+# --- Specific File Types ---
+# Ignore documentation/output files you don't want in the repo
+*.html
+*.txt
+
+# --- Dependencies ---
+# Ignore the vendor folder
+vendor/
+*vendor/
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+
+# --- Build Specific ---
+# Binaries and executables
+tmp/
+*tmp/
+app
+app.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib

@@ -1,4 +1,4 @@
-module github.com/gourangadassamrat/backend-labs/go/01_basic-backend
+module github.com/gourangadassamrat/backend-labs/go/basic/01_basic-backend
 
 go 1.26.1
 

@@ -22,7 +22,7 @@ A clean, modular REST API built with **Go** and **Gorilla Mux**. This project de
 
 ```bash
 git clone https://github.com/GoruangaDasSamrat/backend-labs.git
-cd backend-labs/go/02_basic-db-operations
+cd backend-labs/go/basic/02_basic-db-operations
 ```
 
 - Setup environment variables

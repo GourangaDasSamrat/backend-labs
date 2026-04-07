@@ -1,7 +1,7 @@
 ## Urly - URL Shortner
 
 ## Preview
-[Live link](https://backend-labs-5.onrender.com)
+[Live link](https://blabe5.gouranga.eu.org)
 
 
 ## Tech Stack

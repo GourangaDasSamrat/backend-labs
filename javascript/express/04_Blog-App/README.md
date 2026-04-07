@@ -1,7 +1,7 @@
 ## Blogify - Blog platform
 
 ## Preview
-[Live link](https://backend-labs-lw2s.onrender.com)
+[Live link](https://blabe4.gouranga.eu.org)
 
 # Tech stacks
 

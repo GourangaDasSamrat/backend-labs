@@ -1,0 +1,25 @@
+{
+  "name": "01_auth-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts --format esm --clean --minify",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "Gouranga Das Samrat",
+  "license": "MIT",
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.1",
+    "fastify": "^5.8.4"
+  }
+}

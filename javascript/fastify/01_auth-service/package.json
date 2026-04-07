@@ -2,11 +2,11 @@
   "name": "01_auth-service",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts --format esm --clean --minify",
-    "start": "node dist/index.js"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup src/server.ts --format esm --clean --minify",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "Gouranga Das Samrat",

@@ -1,18 +1,29 @@
 import { FastifyInstance } from "fastify";
 import fp from "fastify-plugin";
-import { createUserSchema } from "@/types/user.types";
-import { registerUserHandler } from "@/controllers/user.controller";
+import { createUserSchema, loginUserSchema } from "@/types/user.types";
+import {
+  registerUserHandler,
+  loginHandler,
+  logoutHandler,
+} from "@/controllers/user.controller";
 
 const userRouteHandler = async (fastify: FastifyInstance): Promise<void> => {
-  /**
-   * POST /api/v1/users
-   * Purpose: Register a new user
-   */
+  // Registration
   fastify.post(
-    "/api/v1/users",
+    "/api/v1/users/register",
     { schema: createUserSchema },
     registerUserHandler
   );
+
+  // Login
+  fastify.post(
+    "/api/v1/users/login",
+    { schema: loginUserSchema },
+    loginHandler
+  );
+
+  // Logout
+  fastify.post("/api/v1/users/logout", logoutHandler);
 };
 
 export const userRouter = fp(userRouteHandler);

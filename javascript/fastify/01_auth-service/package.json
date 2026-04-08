@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src/server.ts --format esm --clean --minify",
+    "build": "tsup src/server.ts --format esm --clean --minify --loader .yaml=copy && cp -r src/docs dist/docs",
     "start": "node dist/server.js",
     "format": "prettier --write ."
   },
@@ -14,6 +14,7 @@
   "license": "MIT",
   "packageManager": "pnpm@10.33.0",
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.5.2",
     "json-schema-to-ts": "^3.1.1",
     "prettier": "^3.8.1",
@@ -25,10 +26,13 @@
     "@fastify/cookie": "^11.0.2",
     "@fastify/jwt": "^10.0.0",
     "@fastify/mongodb": "^10.0.0",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.5",
     "@fastify/type-provider-json-schema-to-ts": "^5.0.0",
     "argon2": "^0.44.0",
     "dotenv": "^17.4.1",
     "fastify": "^5.8.4",
-    "fastify-plugin": "^5.1.0"
+    "fastify-plugin": "^5.1.0",
+    "js-yaml": "^4.1.1"
   }
 }

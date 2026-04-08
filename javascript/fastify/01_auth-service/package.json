@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsup src/server.ts --format esm --clean --minify",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "author": "Gouranga Das Samrat",
@@ -15,6 +16,7 @@
   "devDependencies": {
     "@types/node": "^25.5.2",
     "json-schema-to-ts": "^3.1.1",
+    "prettier": "^3.8.1",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"

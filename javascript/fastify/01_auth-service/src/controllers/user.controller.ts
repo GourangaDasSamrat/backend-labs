@@ -9,30 +9,41 @@ export const registerUserHandler = async (
   const { name, email, password } = request.body;
 
   try {
-    // 1. Hash Password
-    const hashedPassword = await argon2.hash(password);
-
-    // 2. Database Logic
     const db = request.server.mongo.db;
-    if (!db) {
-      request.server.log.error("Database connection missing");
-      return reply.code(500).send({ message: "Internal server error" });
+    if (!db) return reply.code(500).send({ message: "DB Connection Error" });
+
+    const userCollection = db.collection("users");
+
+    // 1. Check if user already exists
+    const existingUser = await userCollection.findOne({ email });
+    if (existingUser) {
+      return reply.code(409).send({
+        message: "A user with this email already exists.",
+      });
     }
 
-    const result = await db.collection("users").insertOne({
+    // 2. Only hash password if user doesn't exist (saves CPU)
+    const hashedPassword = await argon2.hash(password);
+
+    // 3. Insert user
+    const result = await userCollection.insertOne({
       name,
       email,
       password: hashedPassword,
       createdAt: new Date(),
     });
 
-    // 3. Success Response
     return reply.code(201).send({
       id: result.insertedId.toString(),
       message: "User created successfully",
     });
-  } catch (error) {
+  } catch (error: any) {
+    // Catch database unique index violation (Error code 11000)
+    if (error.code === 11000) {
+      return reply.code(409).send({ message: "Email already in use" });
+    }
+
     request.server.log.error(error);
-    return reply.code(500).send({ message: "Failed to create user" });
+    return reply.code(500).send({ message: "Internal server error" });
   }
 };

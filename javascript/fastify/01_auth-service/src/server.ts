@@ -1,22 +1,33 @@
 import "dotenv/config";
-import { userRouter } from '@/routes/user.routes';
-import Fastify from "fastify";
+import Fastify, { FastifyInstance } from "fastify";
+import fastifyMongo from "@fastify/mongodb";
+import { JsonSchemaToTsProvider } from "@fastify/type-provider-json-schema-to-ts";
+import { userRouter } from "@/routes/user.routes";
 
-// create fastify instance
-const fastify = Fastify({
+/**
+ * Initialize instance with explicit Type Provider casting
+ */
+const fastify: FastifyInstance = Fastify({
   logger: true,
+}).withTypeProvider<JsonSchemaToTsProvider>();
+
+/**
+ * Database Connection
+ */
+fastify.register(fastifyMongo, {
+  forceClose: true,
+  url: process.env.MONGODB_URI as string,
 });
 
-// Register routes plugins
-fastify.register(userRouter)
+/**
+ * Routes Registration
+ */
+fastify.register(userRouter);
 
-// Run the server
-const start = async () => {
+const start = async (): Promise<void> => {
   try {
     const port = Number(process.env.PORT) || 4000;
-
-    await fastify.listen({ port });
-    console.log("Server is running on port ", port);
+    await fastify.listen({ port, host: "0.0.0.0" });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

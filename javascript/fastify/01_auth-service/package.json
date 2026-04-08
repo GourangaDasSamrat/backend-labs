@@ -14,12 +14,17 @@
   "packageManager": "pnpm@10.33.0",
   "devDependencies": {
     "@types/node": "^25.5.2",
+    "json-schema-to-ts": "^3.1.1",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
   "dependencies": {
+    "@fastify/mongodb": "^10.0.0",
+    "@fastify/type-provider-json-schema-to-ts": "^5.0.0",
+    "argon2": "^0.44.0",
     "dotenv": "^17.4.1",
-    "fastify": "^5.8.4"
+    "fastify": "^5.8.4",
+    "fastify-plugin": "^5.1.0"
   }
 }

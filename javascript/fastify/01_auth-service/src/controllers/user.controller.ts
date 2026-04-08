@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import argon2 from "argon2";
-import { CreateUserBody } from "@/types/user.types";
+import { CreateUserBody, LoginUserBody } from "@/types/user.types";
 
 export const registerUserHandler = async (
   request: FastifyRequest<{ Body: CreateUserBody }>,
@@ -14,18 +14,15 @@ export const registerUserHandler = async (
 
     const userCollection = db.collection("users");
 
-    // 1. Check if user already exists
     const existingUser = await userCollection.findOne({ email });
     if (existingUser) {
-      return reply.code(409).send({
-        message: "A user with this email already exists.",
-      });
+      return reply
+        .code(409)
+        .send({ message: "A user with this email already exists." });
     }
 
-    // 2. Only hash password if user doesn't exist (saves CPU)
     const hashedPassword = await argon2.hash(password);
 
-    // 3. Insert user
     const result = await userCollection.insertOne({
       name,
       email,
@@ -38,12 +35,64 @@ export const registerUserHandler = async (
       message: "User created successfully",
     });
   } catch (error: any) {
-    // Catch database unique index violation (Error code 11000)
     if (error.code === 11000) {
       return reply.code(409).send({ message: "Email already in use" });
     }
-
     request.server.log.error(error);
     return reply.code(500).send({ message: "Internal server error" });
   }
+};
+
+/**
+ * Handles user login and sets HttpOnly JWT cookie
+ */
+export const loginHandler = async (
+  request: FastifyRequest<{ Body: LoginUserBody }>,
+  reply: FastifyReply
+) => {
+  const { email, password } = request.body;
+
+  try {
+    const db = request.server.mongo.db;
+    const user = await db?.collection("users").findOne({ email });
+
+    // Use a generic error message for security
+    if (!user || !(await argon2.verify(user.password, password))) {
+      return reply.code(401).send({ message: "Invalid email or password" });
+    }
+
+    // Generate JWT
+    const token = await reply.jwtSign({
+      id: user._id,
+      email: user.email,
+    });
+
+    // Set Secure HttpOnly Cookie
+    return reply
+      .setCookie("access_token", token, {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24, // 1 day
+      })
+      .code(200)
+      .send({ message: "Login successful" });
+  } catch (error) {
+    request.server.log.error(error);
+    return reply.code(500).send({ message: "Internal server error" });
+  }
+};
+
+/**
+ * Clears the access_token cookie
+ */
+export const logoutHandler = async (
+  _request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  return reply
+    .clearCookie("access_token", { path: "/" })
+    .code(200)
+    .send({ message: "Logout successful" });
 };

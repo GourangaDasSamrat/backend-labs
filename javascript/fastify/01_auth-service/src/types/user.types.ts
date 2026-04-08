@@ -23,4 +23,26 @@ export const createUserSchema = {
   },
 } as const;
 
+export const loginUserSchema = {
+  body: {
+    type: "object",
+    required: ["email", "password"],
+    properties: {
+      email: { type: "string", format: "email" },
+      password: { type: "string" },
+    },
+    additionalProperties: false,
+  } as const,
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+      },
+      required: ["message"],
+    } as const,
+  },
+} as const;
+
 export type CreateUserBody = FromSchema<typeof createUserSchema.body>;
+export type LoginUserBody = FromSchema<typeof loginUserSchema.body>;

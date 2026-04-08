@@ -1,15 +1,29 @@
 import "dotenv/config";
 import Fastify, { FastifyInstance } from "fastify";
 import fastifyMongo from "@fastify/mongodb";
+import fastifyJwt from "@fastify/jwt";
+import fastifyCookie from "@fastify/cookie";
 import { JsonSchemaToTsProvider } from "@fastify/type-provider-json-schema-to-ts";
 import { userRouter } from "@/routes/user.routes";
 
-/**
- * Initialize instance with explicit Type Provider casting
- */
 const fastify: FastifyInstance = Fastify({
   logger: true,
 }).withTypeProvider<JsonSchemaToTsProvider>();
+
+/**
+ * JWT Configuration
+ */
+fastify.register(fastifyJwt, {
+  secret: process.env.JWT_SECRET || "super-secret-key-change-me",
+});
+
+/**
+ * Cookie Configuration
+ */
+fastify.register(fastifyCookie, {
+  secret: process.env.COOKIE_SECRET || "cookie-secret-key",
+  hook: "onRequest",
+});
 
 /**
  * Database Connection
@@ -17,6 +31,19 @@ const fastify: FastifyInstance = Fastify({
 fastify.register(fastifyMongo, {
   forceClose: true,
   url: process.env.MONGODB_URI as string,
+});
+
+/**
+ * Create unique index for email to prevent duplicates at DB level
+ */
+fastify.ready(async () => {
+  try {
+    await fastify.mongo.db
+      ?.collection("users")
+      .createIndex({ email: 1 }, { unique: true });
+  } catch (err) {
+    fastify.log.error("Index creation failed", err);
+  }
 });
 
 /**

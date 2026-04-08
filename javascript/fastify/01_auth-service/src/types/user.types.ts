@@ -1,8 +1,5 @@
 import { FromSchema } from "json-schema-to-ts";
 
-/**
- * Explicit JSON Schema with 'as const' for literal type inference
- */
 export const createUserSchema = {
   body: {
     type: "object",
@@ -27,6 +24,3 @@ export const createUserSchema = {
 } as const;
 
 export type CreateUserBody = FromSchema<typeof createUserSchema.body>;
-export type CreateUserReply = FromSchema<
-  (typeof createUserSchema.response)[201]
->;

@@ -1,0 +1,50 @@
+# Chatify – real-time chat in Go
+# Requires: go 1.22+, just
+
+binary := "chatify"
+main   := "./cmd/chatify"
+
+# List all recipes
+default:
+    @just --list
+
+# Run directly without producing a binary
+run:
+    go run {{main}}
+
+# Compile the binary
+build:
+    go build -o {{binary}} {{main}}
+
+# Build then run
+start: build
+    ./{{binary}}
+
+# Run on a custom port
+run-port port:
+    PORT={{port}} go run {{main}}
+
+# Format all Go source
+fmt:
+    gofmt -w .
+
+# Vet all packages
+vet:
+    go vet ./...
+
+# Remove compiled binary
+clean:
+    rm -f {{binary}}
+
+# Cross-compile for common targets (output → ./dist/)
+build-all:
+    mkdir -p dist
+    GOOS=linux   GOARCH=amd64  go build -o dist/{{binary}}-linux-amd64       {{main}}
+    GOOS=linux   GOARCH=arm64  go build -o dist/{{binary}}-linux-arm64       {{main}}
+    GOOS=darwin  GOARCH=arm64  go build -o dist/{{binary}}-darwin-arm64      {{main}}
+    GOOS=darwin  GOARCH=amd64  go build -o dist/{{binary}}-darwin-amd64      {{main}}
+    GOOS=windows GOARCH=amd64  go build -o dist/{{binary}}-windows-amd64.exe {{main}}
+
+# Remove binary and dist/
+clean-all: clean
+    rm -rf dist/

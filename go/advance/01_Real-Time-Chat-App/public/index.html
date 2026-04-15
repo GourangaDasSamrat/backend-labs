@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatify | A modern real time chatting app.</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: "#313338",
+              sidebar: "#2b2d31",
+              input: "#383a40",
+              accent: "#5865f2",
+              muted: "#949ba4",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1e1f22;
+        border-radius: 4px;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .msg {
+        animation: fadeUp 0.18s ease-out;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-bg text-white font-sans h-screen flex flex-col overflow-hidden"
+  >
+    <!-- Header -->
+    <div
+      class="flex items-center gap-3 px-4 h-12 bg-sidebar border-b border-black/30 shrink-0 shadow"
+    >
+      <i class="fas fa-hashtag text-muted"></i>
+      <span class="font-bold text-white">general</span>
+      <span class="text-muted text-sm hidden sm:block"
+        >— Chatify real-time chat</span
+      >
+      <div class="ml-auto flex items-center gap-2 text-sm text-muted">
+        <i class="fas fa-circle text-green-500 text-xs"></i>
+        <span>Live</span>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="flex-1 overflow-y-auto px-4 py-4 space-y-3" id="chats">
+      <div class="text-center text-muted text-xs py-6">
+        <i class="fas fa-hashtag text-2xl block mb-2 text-accent"></i>
+        Welcome to <strong class="text-white">Chatify</strong>! Start the
+        conversation.
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="px-4 pb-5 pt-2 shrink-0">
+      <div class="flex items-center gap-3 bg-input rounded-lg px-4 py-3">
+        <input
+          id="chat"
+          type="text"
+          placeholder="Message #general"
+          autocomplete="off"
+          class="flex-1 bg-transparent text-white text-sm placeholder-muted focus:outline-none"
+        />
+        <button
+          id="send"
+          class="text-muted hover:text-accent transition-colors duration-150 text-sm"
+        >
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Native WebSocket client — no socket.io needed -->
+    <script src="./client.js"></script>
+  </body>
+</html>

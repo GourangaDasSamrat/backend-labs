@@ -2,6 +2,7 @@
 
 binary := "app"
 main   := "./cmd/students-api"
+config := "config/local.yaml"
 
 # List all recipes
 default:
@@ -9,11 +10,11 @@ default:
 
 # Run directly without producing a binary
 run:
-    go run {{main}} -config config/local.yaml
+    go run {{main}} -config {{config}}
 
 # Run directly with live reload
 dev:
-    air {{main}} -- -config config/local.yaml
+    air {{main}} -- -config {{config}}
 
 # Compile the binary
 build:
@@ -21,15 +22,15 @@ build:
 
 # Build then run
 start: build
-    ./{{binary}} -config config/local.yaml
+    ./{{binary}} -config {{config}}
 
 # Format all Go source
 fmt:
     gofmt -w .
 
-# Vet all packages
-vet:
-    go vet ./...
+# Lint all packages
+lint:
+    golangci-lint run
 
 # Remove compiled binary
 clean:

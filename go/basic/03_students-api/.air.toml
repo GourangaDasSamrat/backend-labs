@@ -8,7 +8,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = ["-config", "config/local.yaml"]
   bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main ."
+  cmd = "go build -o ./tmp/main ./cmd/students-api"
   delay = 1000
   entrypoint = ["./tmp/main", "-config", "config/local.yaml"]
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]

@@ -26,7 +26,7 @@ PORT=8080 just run        # via env var
 | `dev`  | run dev server with love reload               |
 | `test`        | `go test ./...`                      |
 | `fmt`         | `gofmt -w .`                         |
-| `vet`         | `go vet ./...`                       |
+| `lint`        | `golangci-lint run`                  |
 | `clean`       | remove binary                        |
 | `build-all`   | cross-compile to `dist/` (5 targets) |
 | `clean-all`   | remove binary + `dist/`              |

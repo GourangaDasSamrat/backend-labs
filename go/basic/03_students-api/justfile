@@ -9,11 +9,11 @@ default:
 
 # Run directly without producing a binary
 run:
-    go run {{main}}
+    go run {{main}} -config config/local.yaml
 
 # Run directly with live reload
 dev:
-    air {{main}}
+    air {{main}} -- -config config/local.yaml
 
 # Compile the binary
 build:
@@ -21,7 +21,7 @@ build:
 
 # Build then run
 start: build
-    ./{{binary}}
+    ./{{binary}} -config config/local.yaml
 
 # Format all Go source
 fmt:

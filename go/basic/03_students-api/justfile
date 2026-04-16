@@ -32,9 +32,25 @@ fmt:
 lint:
     golangci-lint run
 
-# Remove compiled binary
+# Run all tests
+test:
+    go test -v ./...
+
+# Generate test stubs for all Go files
+test-gen:
+    gotests -w -all ./...
+
+# Generate test stubs for a specific file
+test-gen-file file:
+    gotests -w -all {{file}}
+
+# Remove compiled binary, dist/, and tmp/
 clean:
+    go clean
+    go clean --testcache
     rm -f {{binary}}
+    rm -rf dist/
+    rm -rf tmp/
 
 # Cross-compile for common targets (output → ./dist/)
 build-all:
@@ -44,7 +60,3 @@ build-all:
     GOOS=darwin  GOARCH=arm64  go build -o dist/{{binary}}-darwin-arm64      {{main}} && \
     GOOS=darwin  GOARCH=amd64  go build -o dist/{{binary}}-darwin-amd64      {{main}} && \
     GOOS=windows GOARCH=amd64  go build -o dist/{{binary}}-windows-amd64.exe {{main}}
-
-# Remove binary and dist/
-clean-all: clean
-    rm -rf dist/

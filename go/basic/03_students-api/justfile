@@ -12,7 +12,7 @@ run:
     go run {{main}}
 
 # Run directly with live reload
-run:
+dev:
     air {{main}}
 
 # Compile the binary
@@ -37,11 +37,11 @@ clean:
 
 # Cross-compile for common targets (output → ./dist/)
 build-all:
-    mkdir -p dist
-    GOOS=linux   GOARCH=amd64  go build -o dist/{{binary}}-linux-amd64       {{main}}
-    GOOS=linux   GOARCH=arm64  go build -o dist/{{binary}}-linux-arm64       {{main}}
-    GOOS=darwin  GOARCH=arm64  go build -o dist/{{binary}}-darwin-arm64      {{main}}
-    GOOS=darwin  GOARCH=amd64  go build -o dist/{{binary}}-darwin-amd64      {{main}}
+    mkdir -p dist && \
+    GOOS=linux   GOARCH=amd64  go build -o dist/{{binary}}-linux-amd64       {{main}} && \
+    GOOS=linux   GOARCH=arm64  go build -o dist/{{binary}}-linux-arm64       {{main}} && \
+    GOOS=darwin  GOARCH=arm64  go build -o dist/{{binary}}-darwin-arm64      {{main}} && \
+    GOOS=darwin  GOARCH=amd64  go build -o dist/{{binary}}-darwin-amd64      {{main}} && \
     GOOS=windows GOARCH=amd64  go build -o dist/{{binary}}-windows-amd64.exe {{main}}
 
 # Remove binary and dist/

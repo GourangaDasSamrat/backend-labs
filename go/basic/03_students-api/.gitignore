@@ -3,3 +3,12 @@ dist/
 
 # test cache
 *.test
+
+# air temp output
+tmp/
+
+# sqlite db file
+storage/
+
+# env
+.env

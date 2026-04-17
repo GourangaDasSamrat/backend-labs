@@ -10,11 +10,11 @@ import (
 // TestMustLoad verifies that MustLoad() correctly loads the configuration from the config file.
 func TestMustLoad(t *testing.T) {
 	tests := []struct {
-		name         string
-		setupEnv     func()
-		cleanupEnv   func()
-		shouldPanic  bool
-		validateCfg  func(*Config) bool
+		name        string
+		setupEnv    func()
+		cleanupEnv  func()
+		shouldPanic bool
+		validateCfg func(*Config) bool
 	}{
 		{
 			name: "Successfully loaded config from environment variable",

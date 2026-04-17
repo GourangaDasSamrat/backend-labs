@@ -1,3 +1,4 @@
+// Package main initializes and runs the students API HTTP server with graceful shutdown support.
 package main
 
 import (
@@ -11,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gourangadassamrat/students-api/internal/config"
+	"github.com/gourangadassamrat/students-api/internal/http/handlers/student"
 )
 
 func main() {
@@ -18,11 +20,7 @@ func main() {
 
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		if _, err := w.Write([]byte("Welcome to students api")); err != nil {
-			slog.Error("Failed to write response", "error", err)
-		}
-	})
+	router.HandleFunc("POST /api/v1/students", student.New())
 
 	server := http.Server{
 		Addr:    cfg.Address,

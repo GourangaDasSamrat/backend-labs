@@ -1,30 +1,68 @@
 # Students API — Go
 
+A learning project demonstrating a students management API built with Go.
+
+## Tech Stack
+
+- **Language:** Go 1.22+
+- **Task Runner:** [just](https://github.com/casey/just)
+- **Live Reload:** [air](https://github.com/air-verse/air)
+- **Linting:** [golangci-lint](https://golangci-lint.run/)
+- **Test Generation:** [gotests](https://github.com/cweill/gotests)
+- **Vulnerability Scanning:** [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck)
+
 ## Requirements
 
 **Core:**
+
 - Go 1.22+
+- [just](https://github.com/casey/just)
 
-**Optional (for justfile recipes):**
-- [just](https://github.com/casey/just) — task runner
-- [air](https://github.com/air-verse/air) — live reload (`dev` recipe)
-- [golangci-lint](https://golangci-lint.run/) — linting (`lint` recipe)
-- [gotests](https://github.com/cweill/gotests) — test generation (`test-gen`, `test-gen-file` recipes)
+**Optional (for specific recipes):**
 
+- [air](https://github.com/air-verse/air) — live reload
+- [golangci-lint](https://golangci-lint.run/) — linting
+- [gotests](https://github.com/cweill/gotests) — test generation
+- [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck) — security scanning
 
+## Quick Start
 
-## Justfile recipes
+```bash
+just dev    # Run with live reload
+just test   # Run tests
+just lint   # Check code quality
+```
 
-| Recipe            | What it does                         |
-|-------------------|--------------------------------------|
-| `run`             | `go run` — no binary produced        |
-| `build`           | compile → `./app`                   |
-| `start`           | build then run                       |
-| `dev`             | run dev server with live reload     |
-| `test`            | `go test -v ./...` — run all tests  |
-| `test-gen`        | generate test stubs for all files   |
-| `test-gen-file`   | generate test stubs for specific file (takes file path as argument) |
-| `fmt`             | `gofmt -w .`                         |
-| `lint`            | `golangci-lint run`                  |
-| `clean`           | remove binary, dist/, and tmp/      |
-| `build-all`       | cross-compile to `dist/` (5 targets) |
+## Available Commands
+
+### Development
+
+| Recipe | Description                         |
+| ------ | ----------------------------------- |
+| `run`  | Run directly without binary         |
+| `dev`  | Run with live reload (requires air) |
+
+### Quality & Security
+
+| Recipe | Description                       |
+| ------ | --------------------------------- |
+| `fmt`  | Format code and tidy dependencies |
+| `lint` | Lint all packages                 |
+| `vuln` | Scan for vulnerabilities          |
+| `test` | Run all tests                     |
+
+### Testing
+
+| Recipe          | Description                           |
+| --------------- | ------------------------------------- |
+| `test-gen`      | Generate test stubs for all files     |
+| `test-gen-file` | Generate test stubs for specific file |
+
+### Build
+
+| Recipe       | Description                            |
+| ------------ | -------------------------------------- |
+| `build`      | Quick local build → `./app`            |
+| `build-prod` | Secure production build                |
+| `build-all`  | Cross-compile to `dist/` (6 platforms) |
+| `clean`      | Remove binaries and cache              |

@@ -4,47 +4,76 @@ binary := "app"
 main   := "./cmd/students-api"
 config := "config/local.yaml"
 
+# Production Flags
+export CGO_ENABLED := "0"
+ld_flags           := "-s -w"
+build_tags         := "-trimpath"
+
 # List all recipes
 default:
     @just --list
 
-# Run directly without producing a binary
+# --- Development ---
+
+# Run directly
 run:
     go run {{main}} -config {{config}}
 
-# Run directly with live reload
+# Run with live reload
 dev:
     air {{main}} -- -config {{config}}
 
-# Compile the binary
-build:
-    go build -o {{binary}} {{main}}
+# --- Quality & Security ---
 
-# Build then run
-start: build
-    ./{{binary}} -config {{config}}
-
-# Format all Go source
+# Format source code
 fmt:
+    go mod tidy
     gofmt -w .
 
 # Lint all packages
 lint:
     golangci-lint run
 
+# Scan for vulnerabilities
+vuln:
+    govulncheck ./...
+
 # Run all tests
 test:
     go test -v ./...
 
-# Generate test stubs for all Go files
+# --- Testing Stubs ---
+
+# Generate all test stubs
 test-gen:
     gotests -w -all ./...
 
-# Generate test stubs for a specific file
+# Generate test for specific file
 test-gen-file file:
     gotests -w -all {{file}}
 
-# Remove compiled binary, dist/, and tmp/
+# --- Build ---
+
+# Quick local build
+build:
+    go build -o {{binary}} {{main}}
+
+# Secure production build
+build-prod:
+    go build {{build_tags}} -ldflags="{{ld_flags}}" -o {{binary}} {{main}}
+
+# Build for all platforms
+build-all:
+    mkdir -p dist
+    @for os in linux darwin windows; do \
+        for arch in amd64 arm64; do \
+            ext=""; [ "$os" = "windows" ] && ext=".exe"; \
+            echo "Building for $os/$arch..."; \
+            GOOS=$os GOARCH=$arch go build {{build_tags}} -ldflags="{{ld_flags}}" -o dist/{{binary}}-$os-$arch$ext {{main}}; \
+        done; \
+    done
+
+# Clean artifacts and cache
 clean:
     go clean
     go clean --testcache
@@ -52,11 +81,3 @@ clean:
     rm -rf dist/
     rm -rf tmp/
 
-# Cross-compile for common targets (output → ./dist/)
-build-all:
-    mkdir -p dist && \
-    GOOS=linux   GOARCH=amd64  go build -o dist/{{binary}}-linux-amd64       {{main}} && \
-    GOOS=linux   GOARCH=arm64  go build -o dist/{{binary}}-linux-arm64       {{main}} && \
-    GOOS=darwin  GOARCH=arm64  go build -o dist/{{binary}}-darwin-arm64      {{main}} && \
-    GOOS=darwin  GOARCH=amd64  go build -o dist/{{binary}}-darwin-amd64      {{main}} && \
-    GOOS=windows GOARCH=amd64  go build -o dist/{{binary}}-windows-amd64.exe {{main}}

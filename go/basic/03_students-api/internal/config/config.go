@@ -7,20 +7,13 @@ import (
 	"log"
 	"os"
 
+	"github.com/gourangadassamrat/students-api/internal/types"
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
-// HTTPServer holds configurations related to the HTTP server.
-type HTTPServer struct {
-	Address string `yaml:"address" env-default:"3000"`
-}
-
-// Config contains all configuration settings for the application.
-type Config struct {
-	Env         string `yaml:"env" env:"Env" env-required:"true" env-default:"production"`
-	StoragePath string `yaml:"storage_path" env-required:"true"`
-	HTTPServer  `yaml:"http_server"`
-}
+// Alias types for backward compatibility
+type HTTPServer = types.HTTPServer
+type Config = types.Config
 
 // MustLoad loads the configuration from a file and returns a Config.
 // It looks for a CONFIG_PATH environment variable first, then falls back to a command-line flag.

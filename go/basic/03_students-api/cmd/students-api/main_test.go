@@ -1,3 +1,4 @@
+// Package main tests verify the HTTP server's endpoint functionality.
 package main
 
 import (
@@ -6,8 +7,8 @@ import (
 	"testing"
 )
 
+// TestMainRouteWelcome verifies that the welcome endpoint returns the expected status and response body.
 func TestMainRouteWelcome(t *testing.T) {
-	// Create a test HTTP handler to verify the welcome endpoint
 	router := http.NewServeMux()
 
 	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
@@ -69,5 +70,18 @@ func TestMainRouterCreation(t *testing.T) {
 
 	if w.Code != http.StatusOK {
 		t.Errorf("Expected status 200, got %d", w.Code)
+	}
+}
+
+func Test_main(t *testing.T) {
+	tests := []struct {
+		name string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			main()
+		})
 	}
 }

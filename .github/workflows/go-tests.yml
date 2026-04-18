@@ -1,0 +1,193 @@
+name: Go Tests
+
+on:
+  push:
+    paths:
+      - 'go/**'
+      - '.github/workflows/go-tests.yml'
+      - '.github/test-paths/go-test-projects.txt'
+  pull_request:
+    paths:
+      - 'go/**'
+      - '.github/workflows/go-tests.yml'
+      - '.github/test-paths/go-test-projects.txt'
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.detect.outputs.projects }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read test projects and detect changes
+        id: detect
+        run: |
+          BASE_REF=""
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            BASE_REF="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_REF="${{ github.event.before }}"
+          fi
+
+          PROJECTS="[]"
+          TEST_PROJECTS=()
+
+          while IFS= read -r project; do
+            if [ -n "$project" ] && [[ ! "$project" =~ ^# ]]; then
+              TEST_PROJECTS+=("$project")
+            fi
+          done < .github/test-paths/go-test-projects.txt
+
+          CHANGED_PROJECTS=()
+          for project in "${TEST_PROJECTS[@]}"; do
+            if [ -n "$BASE_REF" ] && [ "$BASE_REF" != "0000000000000000000000000000000000000000" ]; then
+              if git diff --name-only $BASE_REF HEAD -- "$project" 2>/dev/null | grep -q .; then
+                CHANGED_PROJECTS+=("$project")
+              fi
+            else
+              if git ls-tree -r --name-only HEAD -- "$project" 2>/dev/null | grep -q .; then
+                CHANGED_PROJECTS+=("$project")
+              fi
+            fi
+          done
+
+          if [ ${#CHANGED_PROJECTS[@]} -gt 0 ]; then
+            PROJECTS=$(printf '%s\n' "${CHANGED_PROJECTS[@]}" | jq -R -s -c 'split("\n")[:-1]')
+          fi
+
+          echo "projects=$PROJECTS" >> $GITHUB_OUTPUT
+
+  test:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.projects != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.detect-changes.outputs.projects) }}
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Check for test command
+        id: check-test
+        run: |
+          PROJECT_PATH="go/${{ matrix.project }}"
+          TEST_COMMAND=""
+
+          if [ -f "$PROJECT_PATH/justfile" ] && grep -q "^test:" "$PROJECT_PATH/justfile"; then
+            TEST_COMMAND="just test"
+          elif [ -f "$PROJECT_PATH/Makefile" ] && grep -q "^test:" "$PROJECT_PATH/Makefile"; then
+            TEST_COMMAND="make test"
+          elif [ -f "$PROJECT_PATH/go.mod" ]; then
+            TEST_COMMAND="go test -v ./..."
+          fi
+
+          echo "test-command=$TEST_COMMAND" >> $GITHUB_OUTPUT
+
+      - name: Run tests
+        if: steps.check-test.outputs.test-command != ''
+        run: |
+          cd go/${{ matrix.project }}
+          ${{ steps.check-test.outputs.test-command }}
+
+      - name: Create GitHub Issue on test failure
+        if: failure() && steps.check-test.outputs.test-command != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueTitle = `[Go] Test failure in go/${{ matrix.project }}`;
+            const issueBody = "## Go Test Failure\n\n" +
+              "**Project:** `go/${{ matrix.project }}`\n" +
+              "**Test Command:** `${{ steps.check-test.outputs.test-command }}`\n" +
+              "**Triggered by:** ${{ github.event.head_commit.message || github.event.pull_request.title || 'push' }}\n" +
+              "**Commit:** [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})\n\n" +
+              "### Test Output\n" +
+              "Please check the [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for detailed test output.\n\n" +
+              "---\n" +
+              "*This issue was automatically created by GitHub Actions*";
+
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['go-test-failure', 'go/${{ matrix.project }}']
+            });
+
+            const existingIssue = issues.data.find(issue => issue.title === issueTitle);
+
+            if (existingIssue) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: issueBody
+              });
+              core.info(`Updated issue #${existingIssue.number}`);
+            } else {
+              const newIssue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: issueBody,
+                labels: ['go-test-failure', `go/${{ matrix.project }}`]
+              });
+              core.info(`Created issue #${newIssue.data.number}`);
+            }
+
+      - name: Close GitHub Issue on test success
+        if: success() && steps.check-test.outputs.test-command != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueTitle = `[Go] Test failure in go/${{ matrix.project }}`;
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['go-test-failure', 'go/${{ matrix.project }}']
+            });
+
+            for (const issue of issues.data) {
+              if (issue.title === issueTitle) {
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed'
+                });
+                core.info(`Closed issue #${issue.number}`);
+              }
+            }
+
+      - name: Report test success
+        if: success() && steps.check-test.outputs.test-command != ''
+        run: |
+          echo "✅ All tests passed for: go/${{ matrix.project }}"
+
+  summary:
+    needs: [detect-changes, test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print test summary
+        run: |
+          echo "📊 Go Test Summary"
+          echo "=================="
+          PROJECTS='${{ needs.detect-changes.outputs.projects }}'
+          if [ "$PROJECTS" != "[]" ]; then
+            echo "✅ All tests passed for the following projects:"
+            echo "$PROJECTS" | jq -r '.[]' | while read project; do
+              echo "  ✓ go/$project"
+            done
+          else
+            echo "ℹ️ No Go projects changed"
+          fi

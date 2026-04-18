@@ -1,0 +1,10 @@
+javascript/bun/01_Real-Time-Chat-App
+javascript/express/01_Basic-Bakcend
+javascript/express/02_Basic-FullStack-App
+javascript/express/03_Video-Sharing-App
+javascript/express/04_Blog-App
+javascript/express/05_URL-Shortner
+javascript/express/06_Real-Time-Chat-App
+javascript/express/07_Prisma-MongoDB
+javascript/fastify/01_auth-service
+javascript/nestjs/01_notes-api

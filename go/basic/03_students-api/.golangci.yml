@@ -1,6 +1,26 @@
 linters:
+  disable-all: true
   enable:
-    - errcheck # Checks for unchecked errors
-    - gosimple # Suggests code simplifications
-    - staticcheck # Advanced static analysis
-    - unused # Finds unused constants, variables, functions
+    - errcheck
+    - staticcheck
+    - govet         # We enable govet here
+    - bodyclose
+    - nilnil
+    - typecheck
+    - gosec
+    - revive
+    - unused
+    - gosimple
+    - prealloc
+    - goconst
+    - misspell
+    - whitespace
+
+linters-settings:
+  govet:
+    # This is the correct way to enable shadowing analysis 
+    # without triggering the "deprecated" warning or "unknown linter" error.
+    enable:
+      - shadow
+  revive:
+    severity: warning

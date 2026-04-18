@@ -15,7 +15,7 @@ dist/
 tmp/
 
 # sqlite db file
-storage/
+!/internal/storage/
 
 # env
 .env
@@ -29,7 +29,7 @@ dist/
 tmp/
 
 # sqlite db file
-storage/
+/storage/
 
 # env
 .env

@@ -1,14 +1,20 @@
 {
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+
   "[go]": {
     "editor.defaultFormatter": "golang.go"
   },
-  // Golang
+
   "go.useLanguageServer": true,
   "go.formatTool": "goimports",
-  "go.lintTool": "golangci-lint",
+  "go.lintTool": "golangci-lint-v2",
   "go.inlayHints.assignVariableTypes": true,
   "go.inlayHints.parameterNames": true,
   "go.inlayHints.compositeLiteralTypes": true,
+  "go.toolsManagement.autoUpdate": true,
+  "go.testFlags": ["-v"],
+  "go.generateTestsFlags": ["-w", "-all"],
   "gopls": {
     "ui.semanticTokens": true,
     "ui.completion.usePlaceholders": true

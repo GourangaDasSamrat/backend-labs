@@ -73,15 +73,8 @@ func TestMainRouterCreation(t *testing.T) {
 	}
 }
 
-func Test_main(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			main()
-		})
-	}
-}
+// Note: Test_main is not implemented as the main() function directly starts an HTTP server
+// and is not suitable for unit testing. The functionality of the server (routing, handlers)
+// is tested through integration tests and handler-specific tests in other packages.
+// To properly test main(), consider implementing an initialization function that can be
+// tested separately from the main() function itself.

@@ -9,13 +9,14 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/gourangadassamrat/students-api/internal/storage"
 	"github.com/gourangadassamrat/students-api/internal/types"
 	"github.com/gourangadassamrat/students-api/internal/utils/response"
 )
 
 // New returns an HTTP handler function that processes POST requests to create a new student.
 // It decodes the JSON request body, validates the student data, and returns appropriate responses.
-func New() http.HandlerFunc {
+func New(storage storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var student types.Student
 

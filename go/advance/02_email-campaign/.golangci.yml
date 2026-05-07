@@ -1,0 +1,26 @@
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - staticcheck
+    - govet         # We enable govet here
+    - bodyclose
+    - nilnil
+    - typecheck
+    - gosec
+    - revive
+    - unused
+    - gosimple
+    - prealloc
+    - goconst
+    - misspell
+    - whitespace
+
+linters-settings:
+  govet:
+    # This is the correct way to enable shadowing analysis 
+    # without triggering the "deprecated" warning or "unknown linter" error.
+    enable:
+      - shadow
+  revive:
+    severity: warning

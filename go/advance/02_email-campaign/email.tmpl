@@ -1,0 +1,238 @@
+To: {{.Email}}
+Subject: Hello, {{.Name}}
+MIME-Version: 1.0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+List-Unsubscribe: <#>
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Hello, {{.Name}}</title>
+    <!--[if mso]>
+        <noscript>
+            <xml>
+                <o:OfficeDocumentSettings>
+                    <o:AllowPNG/>
+                    <o:PixelsPerInch>96</o:PixelsPerInch>
+                </o:OfficeDocumentSettings>
+            </xml>
+        </noscript>
+    <![endif]-->
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #222222;
+            background-color: #f4f4f4;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, tr, td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            border: 0;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: nearest-neighbor;
+            display: block;
+        }
+        a {
+            text-decoration: none;
+            color: #0066cc;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .wrapper {
+            width: 100%;
+            table-layout: fixed;
+            background-color: #f4f4f4;
+            padding: 20px 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 0 1px rgba(0,0,0,0.15);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 48px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        .content {
+            padding: 40px 30px;
+            line-height: 1.6;
+        }
+        .content p {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            color: #333333;
+        }
+        .content p:last-child {
+            margin-bottom: 0;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #222222;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 32px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #0066cc;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 32px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 24px 0;
+            border: 1px solid #0066cc;
+            font-size: 16px;
+        }
+        .cta-button:hover {
+            background-color: #0052a3;
+            border-color: #0052a3;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 32px 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666666;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer p {
+            margin: 0 0 12px 0;
+        }
+        .footer p:last-child {
+            margin: 0;
+        }
+        .footer a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .signature {
+            font-size: 14px;
+            color: #555555;
+            margin-top: 24px;
+        }
+        @media (max-width: 600px) {
+            body {
+                width: 100% !important;
+                min-width: 320px !important;
+            }
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .header {
+                padding: 32px 15px !important;
+            }
+            .header h1 {
+                font-size: 24px !important;
+            }
+            .content {
+                padding: 30px 15px !important;
+            }
+            .content p {
+                font-size: 16px !important;
+            }
+            .footer {
+                padding: 24px 15px !important;
+                font-size: 12px !important;
+            }
+            .cta-button {
+                display: block !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table class="wrapper" role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center">
+                <table class="container" role="presentation" width="600" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <h1>Welcome</h1>
+                        </td>
+                    </tr>
+                    <!-- Content -->
+                    <tr>
+                        <td class="content">
+                            <p class="greeting">Hi {{.Name}},</p>
+                            <p>We're thrilled to have you join us. This email confirms that we've received your information and are excited to connect with you.</p>
+                            <p>If you have any questions about our service or need further assistance, our support team is always here to help.</p>
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 32px 0;">
+                                <tr>
+                                    <td>
+                                        <a href="#" class="cta-button">Get Started</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="divider"></div>
+                            <p class="signature">Best regards,<br><strong>Your Company Team</strong></p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            <p>
+                                <strong>Your Company Inc.</strong><br>
+                                123 Business Street<br>
+                                City, State 12345
+                            </p>
+                            <p>
+                                <a href="#">Preferences</a> &nbsp;&bull;&nbsp;
+                                <a href="#">Privacy Policy</a> &nbsp;&bull;&nbsp;
+                                <a href="#">Unsubscribe</a>
+                            </p>
+                            <p style="margin-top: 16px; color: #999999;">
+                                © 2026 Your Company, Inc. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

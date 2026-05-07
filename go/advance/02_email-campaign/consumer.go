@@ -15,17 +15,21 @@ func emailWorker(id int, ch chan Recipient, wg *sync.WaitGroup) {
 		smtpHost := "localhost"
 		smtpPort := 1025
 
-		formattedMsg := fmt.Sprintf("To: %s\r\nSubject: Email Test\r\n\r\n%s\r\n", recipient.Email, "Just my email campaign")
-		msg := []byte(formattedMsg)
+		msg,err:= executeTemplate(recipient)
+		if err != nil {
+			fmt.Printf("Worker :%d Error parsing template for %s",id, recipient.Email)
+			// TODO: Add to dlq
+			continue
+		}
 
-		fmt.Printf("Worker %d: Sending email %s\n", id, recipient.Email)
+		fmt.Printf("Worker :%d Sending email %s\n", id, recipient.Email)
 
-		err := smtp.SendMail(
+		err = smtp.SendMail(
 			fmt.Sprintf("%s:%d", smtpHost, smtpPort),
 			nil,
 			"no-reply@gouranga.eu.org",
 			[]string{recipient.Email},
-			msg,
+			[]byte(msg),
 		)
 
 		if err != nil {
@@ -34,6 +38,6 @@ func emailWorker(id int, ch chan Recipient, wg *sync.WaitGroup) {
 
 		time.Sleep(time.Millisecond * 50)
 
-		fmt.Printf("Worker %d: Sent email %s\n", id, recipient.Email)
+		fmt.Printf("Worker :%d Sent email %s\n", id, recipient.Email)
 	}
 }
